@@ -23,14 +23,20 @@ class MunroDataParserTest {
         MockKAnnotations.init(this)
 
 //        testDataInputStream = MunroDataParserTest::class.java.getResourceAsStream("/munrotab_v6.2.csv")
-        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_v6.2.csv")
+        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_v6.2.csv")!!
         testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
     }
 
     @Test
     fun `init method parses adds all line to the list`() {
-        val parser = MunroDataParser(testDataFileInputStream)
+        val parser = MunroDataParser(testDataFileInputStream, ",")
 
-        assertEquals(611, parser.getResults().size)
+        assertEquals(610, parser.getResults().size)
+    }
+
+    @Test
+    fun `parser reads headers correctly`() {
+        val parser = MunroDataParser(testDataFileInputStream, ",")
+        assertEquals(29, parser.getHeaders().size)
     }
 }
