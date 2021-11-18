@@ -39,4 +39,37 @@ class MunroDataParserTest {
         val parser = MunroDataParser(testDataFileInputStream, ",")
         assertEquals(29, parser.getHeaders().size)
     }
+
+    @Test
+    fun `parser stores correct position of required columns`() {
+        val parser = MunroDataParser(testDataFileInputStream, ",")
+        assertEquals(4, parser.getHeaderListMap().size)
+        assertEquals(5, parser.getHeaderListMap()["Name"])
+        assertEquals(9, parser.getHeaderListMap()["Height (m)"])
+        assertEquals(27, parser.getHeaderListMap()["Post 1997"])
+        assertEquals(13, parser.getHeaderListMap()["Grid Ref"])
+    }
+
+    @Test
+    fun `parser stores correct position of required columns when headers are reordered`() {
+        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_reordered_headers.csv")!!
+        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        assertEquals(4, parser.getHeaderListMap().size)
+        assertEquals(12, parser.getHeaderListMap()["Name"])
+        assertEquals(21, parser.getHeaderListMap()["Height (m)"])
+        assertEquals(1, parser.getHeaderListMap()["Post 1997"])
+        assertEquals(7, parser.getHeaderListMap()["Grid Ref"])
+    }
+
+    //test position with updated column order
+    //return error when some of the columns are missing
+
+    //test for empty lines
+    //test for malformed file
+
+    //test for data with commas etc.
+
+    //test when you'll be requiring for the element of the line array, for the required column position, and make sure it exists there
+    //maybe also check wheter number opf the line size is equal to the total headers, this way you'll know if the given row comes along with the header structure
 }
