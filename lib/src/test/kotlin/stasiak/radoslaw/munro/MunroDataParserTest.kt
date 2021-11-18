@@ -72,4 +72,7 @@ class MunroDataParserTest {
 
     //test when you'll be requiring for the element of the line array, for the required column position, and make sure it exists there
     //maybe also check wheter number opf the line size is equal to the total headers, this way you'll know if the given row comes along with the header structure
+
+
+    //remember to update Readme with usage of the library and how to build it
 }
