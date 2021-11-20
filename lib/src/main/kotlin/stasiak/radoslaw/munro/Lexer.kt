@@ -36,7 +36,7 @@ class Lexer(val csvRecord: String, val delimiter: Char) {
                         result.add(token.toString())
                         token.setLength(0)
                         isQuoteColumn = false
-                    }else{
+                    }else if(previousChar == "\"".single()){
                         token.append("\"")
                     }
 

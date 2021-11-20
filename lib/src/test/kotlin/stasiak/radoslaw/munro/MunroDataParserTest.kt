@@ -113,7 +113,7 @@ class MunroDataParserTest {
         assertEquals("MUN",result[17])
         assertEquals("",result[18])
         assertEquals("TOP",result[19])
-        assertEquals("Hej, to jest \"\" test",result[20])
+        assertEquals("Hej, to jest \" test",result[20])
 
         assertEquals(21, result.size)
 
