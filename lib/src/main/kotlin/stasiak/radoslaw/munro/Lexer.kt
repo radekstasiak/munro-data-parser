@@ -6,10 +6,10 @@ class Lexer(val csvRecord: String, val delimiter: Char) {
     var previousChar: Char? = null
     var currentPosition = 0
 
-    private fun readRegularColumn(): String {
-        val columnEndPosition = csvRecord.indexOf(delimiter, currentPosition + 1)
+    private fun readRegularColumn(startIndex: Int): String {
+        val columnEndPosition = csvRecord.indexOf(delimiter, startIndex)
         //get the value between current and next delimiters
-        val result = csvRecord.substring(currentPosition + 1, columnEndPosition)
+        val result = csvRecord.substring(startIndex, columnEndPosition)
         //update current position to the next delimiter position
         currentPosition = columnEndPosition - 1
         return result
@@ -19,39 +19,41 @@ class Lexer(val csvRecord: String, val delimiter: Char) {
     private fun readQuoteColumn(): String {
         val token = StringBuffer()
         var previousChar: Char? = null
-        //get to the next position after delimiter
-        currentPosition++
+        val currentColumn = csvRecord.substring(currentPosition + 1, csvRecord.length)
+        var columnPosition = 0
         while (true) {
-            val currentChar = csvRecord[currentPosition]
+            val currentChar = currentColumn[columnPosition]
             var appendChar = true
             if (currentChar.isQuoteChar()) {
 
                 //don't append first opening quote
-                if (csvRecord.isSOL(currentPosition)) appendChar = false
+                if (currentColumn.isSOL(columnPosition)) appendChar = false
 
                 //if next char is a quote skip current one
                 //also check if previous one was a quote to cover multiple quotes characters in a row
-                if (!csvRecord.isEOL(currentPosition) && csvRecord[currentPosition + 1].isQuoteChar() && previousChar.isQuoteChar()) {
+                if (!currentColumn.isEOL(columnPosition) && currentColumn[columnPosition + 1].isQuoteChar()) {
                     appendChar = false
                 }
 
-                if (!csvRecord.isEOL(currentPosition) && csvRecord[currentPosition + 1] == ",".single()) {
+                //check if it's the end of the column or end of the line
+                if ((!currentColumn.isEOL(columnPosition) && currentColumn[columnPosition + 1] == ",".single())
+                    || currentColumn.isEOL(columnPosition)
+                ) {
                     break
                 }
             }
             if (appendChar) token.append(currentChar)
             previousChar = currentChar
-            currentPosition++
+            columnPosition++
         }
+        currentColumn.substring(0, columnPosition)
+        currentPosition = currentPosition + columnPosition+1
         return token.toString()
     }
 
 
     init {
         val token = StringBuffer()
-
-        var isQuoteColumn = false
-
         while (currentPosition < csvRecord.length) {
             val currentChar = csvRecord[currentPosition]
             //check if first or last element of the row is empty field
@@ -60,55 +62,20 @@ class Lexer(val csvRecord: String, val delimiter: Char) {
                 token.setLength(0)
             }
 
-
-            //we reach next column
             if (!csvRecord.isEOL(currentPosition)) {
                 //check if next column contains quoted value
                 val value = if (csvRecord[currentPosition + 1].isQuoteChar()) {
                     readQuoteColumn()
                 } else {
-                    readRegularColumn()
+                    val startIndex = if (currentChar == ",".single()) currentPosition + 1 else currentPosition
+                    readRegularColumn(startIndex)
                 }
-
+                println(value)
                 result.add(value)
             }
-
             previousChar = currentChar
             currentPosition++
         }
-        //use for ?
-//        csvRecord.toCharArray().forEachIndexed { index, char ->
-//            //delimiter detected
-//            if (char == delimiter && !isQuoteColumn) {
-//                if (currentPosition == 0 || token.toString().isNotBlank() || previousChar == delimiter) {
-//                    result.add(token.toString())
-//                    token.setLength(0)
-//                }
-//                //check if first value is a field containing delimiter
-//            } else if (char.isDoubleQuote()) {
-//                //check if we've already begun parsing field with delimiter
-//                if (!isQuoteColumn) {
-//                    isQuoteColumn = true
-//                } else {
-//                    if (isEOL(currentPosition)) {
-//                        result.add(token.toString())
-//                        token.setLength(0)
-//                        isQuoteColumn = false
-//                    } else if (currentPosition < csvRecord.length && csvRecord[currentPosition + 1] != "\"".single() && previousChar != "\"".single()) {
-//                        result.add(token.toString())
-//                        token.setLength(0)
-//                        isQuoteColumn = false
-//                    }else if(previousChar == "\"".single()){
-//                        token.append("\"")
-//                    }
-//                }
-//            } else {
-//                token.append(char)
-//            }
-//
-//            previousChar = char
-//            currentPosition++
-//        }
 
     }
 
