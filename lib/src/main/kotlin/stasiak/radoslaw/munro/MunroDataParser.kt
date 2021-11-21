@@ -13,10 +13,6 @@ class MunroDataParser(
     private val inputStream: FileInputStream,
     private val delimiter: String
 ) {
-//    private val requiredColumnKeyName = "Name"
-//    private val requiredColumnKeyHeightInMeters = "Height (m)"
-//    private val requiredColumnKeyHillCategory = "Post 1997"
-//    private val requiredColumnKeyGridRef = "Grid Ref"
 
     private val requiredColumnList = listOf(
         RequiredHeader.REQUIRED_HEADER_NAME,
@@ -29,7 +25,6 @@ class MunroDataParser(
     private var requiredHeadersWithPosMap: HashMap<String, Int> = hashMapOf()
 
     init {
-        try {
             val scanner = Scanner(inputStream, "UTF-8")
             var lineNumber = 0
             while (scanner.hasNextLine()) {
@@ -48,7 +43,7 @@ class MunroDataParser(
                                 index
                         }
 
-                    //validate all required headers exist
+                    //validate whether all the required headers exist
                     val headersValidation = validateHeaders()
                     if (headersValidation.isNotEmpty()) {
                         throw IllegalArgumentException(headersValidation.toErrorMessage())
@@ -58,20 +53,20 @@ class MunroDataParser(
                 } else {
                     val csvRecordParser = CSVRecordParser(line, delimiter.single())
                     val row = csvRecordParser.result
-                    val nameColumnPosition = requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_NAME.value]!!
-                    val requiredColumnKeyHeightInMeters =
+                    val requiredHeaderNameColumnPos = requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_NAME.value]!!
+                    val requiredColumnKeyHeightInMetersPos =
                         requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]!!
-                    val requiredColumnKeyHillCategory =
+                    val requiredColumnKeyHillCategoryPos =
                         requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value]!!
-                    val requiredColumnKeyGridRef =
+                    val requiredColumnKeyGridRefPos =
                         requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value]!!
 
                     munroDataRecordList.add(
                         MunroDataRecord(
-                            name = if (row.size > nameColumnPosition) row[nameColumnPosition] else "",
-                            heightInMeters = if (row.size > requiredColumnKeyHeightInMeters) row[requiredColumnKeyHeightInMeters] else "",
-                            hillCategory = if (row.size > requiredColumnKeyHillCategory) row[requiredColumnKeyHillCategory] else "",
-                            gridRef = if (row.size > requiredColumnKeyGridRef) row[requiredColumnKeyGridRef] else ""
+                            name = if (row.size > requiredHeaderNameColumnPos) row[requiredHeaderNameColumnPos] else "",
+                            heightInMeters = if (row.size > requiredColumnKeyHeightInMetersPos) row[requiredColumnKeyHeightInMetersPos] else "",
+                            hillCategory = if (row.size > requiredColumnKeyHillCategoryPos) row[requiredColumnKeyHillCategoryPos] else "",
+                            gridRef = if (row.size > requiredColumnKeyGridRefPos) row[requiredColumnKeyGridRefPos] else ""
                         )
                     )
                 }
@@ -84,19 +79,7 @@ class MunroDataParser(
             }
 
             scanner.close()
-        } catch (exception: IOException) {
-
-//        } finally {
-//            inputStream.close()
-//            if (sca != null) {
-//                sc.close()
-//            }
-//        }
-        }
-
-
     }
-
 
     private fun validateHeaders(): List<RequiredHeaderValidationError> {
         val errorList = arrayListOf<RequiredHeaderValidationError>()
@@ -141,7 +124,3 @@ class MunroDataParser(
         REQUIRED_HEADER_GRID_REF(value = "Grid Ref")
     }
 }
-
-//enum class MunroDataParserConfig(val value: String) {
-//    DEFAULT(value = ",")
-//}
