@@ -51,7 +51,7 @@ class MunroDataParser(
                     }
 
                 } else {
-                    val csvRecordParser = CSVRecordParser(line, delimiter.single())
+                    val csvRecordParser = CSVRecordParser.instantiate(line, delimiter.single())
                     val row = csvRecordParser.result
                     val requiredHeaderNameColumnPos = requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_NAME.value]!!
                     val requiredColumnKeyHeightInMetersPos =
@@ -106,9 +106,14 @@ class MunroDataParser(
         return errorMessage.toString()
     }
 
-    fun getResults(): List<MunroDataRecord> = munroDataRecordList
-    fun getHeaders(): List<String> = headerList
-    fun getHeaderListMap(): Map<String, Int> = requiredHeadersWithPosMap
+    @JvmSynthetic
+    internal fun getResults(): List<MunroDataRecord> = munroDataRecordList
+
+    @JvmSynthetic
+    internal fun getHeaders(): List<String> = headerList
+
+    @JvmSynthetic
+    internal fun getHeaderListMap(): Map<String, Int> = requiredHeadersWithPosMap
 
     private enum class RequiredHeaderValidationError(val value: String) {
         MISSING_NAME_HEADER(value = "Name"),

@@ -123,7 +123,7 @@ class MunroDataParserTest {
     }
 
     @Test
-    fun `parsers throws exception with correct message when "Name" header is missing`() {
+    fun `parsers throws exception with correct message when Name header is missing`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_header_name_missing.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
 
@@ -134,7 +134,7 @@ class MunroDataParserTest {
     }
 
     @Test
-    fun `parsers throws exception with correct message when "Grid Ref" header is missing`() {
+    fun `parsers throws exception with correct message when Grid Ref header is missing`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_header_gridref_missing.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
 
