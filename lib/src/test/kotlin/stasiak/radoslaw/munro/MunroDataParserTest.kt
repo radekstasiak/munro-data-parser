@@ -72,10 +72,52 @@ class MunroDataParserTest {
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
         val munroDatRecords = parser.getResults()
+
+        assertEquals(18, munroDatRecords.size)
+        //name=Ben Chonzie, heightInMeters=931, hillCategory=MUN, gridRef=NN773308
         assertEquals("Ben Chonzie", munroDatRecords[0].name)
         assertEquals("931", munroDatRecords[0].heightInMeters)
         assertEquals("MUN", munroDatRecords[0].hillCategory)
         assertEquals("NN773308", munroDatRecords[0].gridRef)
+
+        //name=, heightInMeters=1216, hillCategory=TOP, gridRef=NH985025
+        assertEquals("", munroDatRecords[2].name)
+        assertEquals("1216", munroDatRecords[2].heightInMeters)
+        assertEquals("TOP", munroDatRecords[2].hillCategory)
+        assertEquals("NH985025", munroDatRecords[2].gridRef)
+
+        //name=Sgurr na Banachdich, heightInMeters=, hillCategory=MUN, gridRef=NG440224
+        assertEquals("Sgurr na Banachdich", munroDatRecords[5].name)
+        assertEquals("", munroDatRecords[5].heightInMeters)
+        assertEquals("MUN", munroDatRecords[5].hillCategory)
+        assertEquals("NG440224", munroDatRecords[5].gridRef)
+
+        //name=Sgurr na Banachdich - Sgurr Thormaid, heightInMeters=926, hillCategory=, gridRef=NG441226
+        assertEquals("Sgurr na Banachdich - Sgurr Thormaid", munroDatRecords[7].name)
+        assertEquals("926", munroDatRecords[7].heightInMeters)
+        assertEquals("", munroDatRecords[7].hillCategory)
+        assertEquals("NG441226", munroDatRecords[7].gridRef)
+
+        //name=Ben More, heightInMeters=966, hillCategory=MUN, gridRef=
+        assertEquals("Ben More", munroDatRecords[9].name)
+        assertEquals("966", munroDatRecords[9].heightInMeters)
+        assertEquals("MUN", munroDatRecords[9].hillCategory)
+        assertEquals("", munroDatRecords[9].gridRef)
+    }
+
+    @Test
+    fun `parsers map MunroDataRecords correctly when required columns are missing`() {
+        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_required_columns_missing.csv")!!
+        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val munroDatRecords = parser.getResults()
+
+        assertEquals(1, munroDatRecords.size)
+
+        assertEquals("", munroDatRecords[0].name)
+        assertEquals("", munroDatRecords[0].heightInMeters)
+        assertEquals("", munroDatRecords[0].hillCategory)
+        assertEquals("", munroDatRecords[0].gridRef)
 
     }
 

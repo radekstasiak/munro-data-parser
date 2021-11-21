@@ -48,14 +48,19 @@ class MunroDataParser(
                     while (line.isNullOrBlank()) {
                         line = scanner.nextLine()
                     }
-                    val row = line.split(delimiter).map { it.trim() }
-                    row.get(5)
+                    val csvRecordParser = CSVRecordParser(line,delimiter.single())
+                    val row = csvRecordParser.result
+                    val nameColumnPosition = requiredHeadersWithPosMap[requiredColumnKeyName]!!
+                    val requiredColumnKeyHeightInMeters = requiredHeadersWithPosMap[requiredColumnKeyHeightInMeters]!!
+                    val requiredColumnKeyHillCategory = requiredHeadersWithPosMap[requiredColumnKeyHillCategory]!!
+                    val requiredColumnKeyGridRef = requiredHeadersWithPosMap[requiredColumnKeyGridRef]!!
+
                     munroDataRecordList.add(
                         MunroDataRecord(
-                            name = row[requiredHeadersWithPosMap[requiredColumnKeyName]!!],
-                            heightInMeters = row[requiredHeadersWithPosMap[requiredColumnKeyHeightInMeters]!!],
-                            hillCategory = row[requiredHeadersWithPosMap[requiredColumnKeyHillCategory]!!],
-                            gridRef = row[requiredHeadersWithPosMap[requiredColumnKeyGridRef]!!]
+                            name = if(row.size > nameColumnPosition) row[nameColumnPosition] else "",
+                            heightInMeters = if(row.size > requiredColumnKeyHeightInMeters) row[requiredColumnKeyHeightInMeters] else "",
+                            hillCategory =if(row.size > requiredColumnKeyHillCategory) row[requiredColumnKeyHillCategory] else "" ,
+                            gridRef =if(row.size > requiredColumnKeyGridRef) row[requiredColumnKeyGridRef] else ""
                         )
                     )
                 }
