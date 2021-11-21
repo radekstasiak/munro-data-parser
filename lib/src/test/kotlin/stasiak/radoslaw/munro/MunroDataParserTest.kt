@@ -1,6 +1,7 @@
 package stasiak.radoslaw.munro
 
 import io.mockk.MockKAnnotations
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 import java.io.FileInputStream
@@ -64,6 +65,11 @@ class MunroDataParserTest {
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
         assertEquals(2, parser.getResults().size)
+        assertEquals(4, parser.getHeaderListMap().size)
+        assertEquals(12, parser.getHeaderListMap()["Name"])
+        assertEquals(21, parser.getHeaderListMap()["Height (m)"])
+        assertEquals(1, parser.getHeaderListMap()["Post 1997"])
+        assertEquals(7, parser.getHeaderListMap()["Grid Ref"])
     }
 
     @Test
@@ -118,18 +124,46 @@ class MunroDataParserTest {
         assertEquals("", munroDatRecords[0].heightInMeters)
         assertEquals("", munroDatRecords[0].hillCategory)
         assertEquals("", munroDatRecords[0].gridRef)
+    }
 
+    @Test
+    fun `parsers throws exception with correct message when "Name" header is missing`(){
+        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_header_name_missing.csv")!!
+        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
+
+        val exception = assertThrows(IllegalArgumentException::class.java) {
+            MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        }
+        assertEquals("Required headers are missing:`Name`", exception.message)
+    }
+
+    @Test
+    fun `parsers throws exception with correct message when "Grid Ref" header is missing`(){
+        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_header_gridref_missing.csv")!!
+        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
+
+        val exception = assertThrows(IllegalArgumentException::class.java) {
+            MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        }
+        assertEquals("Required headers are missing:`Grid Ref`", exception.message)
+    }
+
+    @Test
+    fun `parsers throws exception with correct message when all of the required headers are missing`(){
+        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_all_required_headers_missing.csv")!!
+        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
+
+        val exception = assertThrows(IllegalArgumentException::class.java) {
+            MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        }
+        assertEquals("Required headers are missing:`Name`,`Height (m)`,`Post 1997`,`Grid Ref`", exception.message)
     }
 
 
     //test position with updated column order
-    //return error when some of the columns are missing
-
-    //test for empty lines
     //test for malformed file
     //test for any other file being uploaded
 
-    //test when you'll be requiring for the element of the line array, for the required column position, and make sure it exists there
     //maybe also check wheter number opf the line size is equal to the total headers, this way you'll know if the given row comes along with the header structure
 
 
