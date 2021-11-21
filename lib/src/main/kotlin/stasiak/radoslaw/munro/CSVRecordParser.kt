@@ -1,8 +1,8 @@
 package stasiak.radoslaw.munro
 
-class CSVRecordParser(val csvRecord: String, val delimiter: Char) {
+class CSVRecordParser(private val csvRecord: String, private val delimiter: Char) {
 
-//    val quoteChar = "\"".single()
+    private val quoteChar = "\"".single()
     val result: ArrayList<String> = arrayListOf()
     private var currentPosition = 0
 
@@ -29,13 +29,12 @@ class CSVRecordParser(val csvRecord: String, val delimiter: Char) {
                 if (currentColumn.isSOL(columnPosition)) appendChar = false
 
                 //if next char is a quote skip current one
-                //also check if previous one was a quote to cover multiple quotes characters in a row
                 if (!currentColumn.isEOL(columnPosition) && currentColumn[columnPosition + 1].isQuoteChar()) {
                     appendChar = false
                 }
 
                 //check if it's the end of the column or end of the line
-                if ((!currentColumn.isEOL(columnPosition) && currentColumn[columnPosition + 1] == ",".single())
+                if ((!currentColumn.isEOL(columnPosition) && currentColumn[columnPosition + 1] == delimiter)
                     || currentColumn.isEOL(columnPosition)
                 ) {
                     break
@@ -54,18 +53,20 @@ class CSVRecordParser(val csvRecord: String, val delimiter: Char) {
         val token = StringBuffer()
         while (currentPosition < csvRecord.length) {
             val currentChar = csvRecord[currentPosition]
-            //check if first or last element of the row is empty field
+            //check if first or last element of the row is an empty field
             if ((csvRecord.isSOL(currentPosition) || csvRecord.isEOL(currentPosition)) && currentChar == delimiter) {
+                //to cover case of a record containing only 2 empty values i.e.","
+                if(csvRecord == delimiter.toString())result.add(token.toString())
                 result.add(token.toString())
                 token.setLength(0)
             }
 
             if (!csvRecord.isEOL(currentPosition)) {
-                //check if next column contains quoted value
-                val value = if (csvRecord[currentPosition + 1].isQuoteChar()) {
+                //check if column contains quoted value
+                val value = if (csvRecord[currentPosition].isQuoteChar() || csvRecord[currentPosition + 1].isQuoteChar()) {
                     readQuoteColumn()
                 } else {
-                    val startIndex = if (currentChar == ",".single()) currentPosition + 1 else currentPosition
+                    val startIndex = if (currentChar == delimiter) currentPosition + 1 else currentPosition
                     readRegularColumn(startIndex)
                 }
                 result.add(value)
@@ -75,7 +76,7 @@ class CSVRecordParser(val csvRecord: String, val delimiter: Char) {
 
     }
 
-    private fun Char?.isQuoteChar() = this == "\"".single()
+    private fun Char?.isQuoteChar() = this == quoteChar
     private fun String.isEOL(currentPosition: Int): Boolean = currentPosition == this.length - 1
     private fun String.isSOL(currentPosition: Int): Boolean = currentPosition == 0
 }
