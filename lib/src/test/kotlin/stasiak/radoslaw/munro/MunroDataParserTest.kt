@@ -90,8 +90,8 @@ class MunroDataParserTest {
             ",1,\"http://www.streetmap.co.uk/newmap.srf?x=277324&y=730857&z=3&sv=277324,730857&st=4&tl=~&bi=~&lu=N&ar=y\",http://www.geograph.org.uk/gridref/NN7732430857,http://www.hill-bagging.co.uk/mountaindetails.php?qu=S&rf=1,Ben Chonzie,1,01A,1.1,931,3054,51 52,OL47W 368W 379W,NN773308,NN7732430857,277324,730857,MUN,,TOP,\"Hej, to jest \"\" test\""
 //            "\"Hej, to jest \"\" test\","
 //            "1,12,test,\"this, is\"\"\"\" test\","
-        val lexer = Lexer(csvRecord = csvRecord,",".single())
-        val result = lexer.result
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord,",".single())
+        val result = csvRecordParser.result
 
         assertEquals("",result[0])
         assertEquals("1",result[1])

@@ -1,24 +1,23 @@
 package stasiak.radoslaw.munro
 
-class Lexer(val csvRecord: String, val delimiter: Char) {
+class CSVRecordParser(val csvRecord: String, val delimiter: Char) {
 
+//    val quoteChar = "\"".single()
     val result: ArrayList<String> = arrayListOf()
-    var previousChar: Char? = null
-    var currentPosition = 0
+    private var currentPosition = 0
 
     private fun readRegularColumn(startIndex: Int): String {
         val columnEndPosition = csvRecord.indexOf(delimiter, startIndex)
-        //get the value between current and next delimiters
-        val result = csvRecord.substring(startIndex, columnEndPosition)
-        //update current position to the next delimiter position
-        currentPosition = columnEndPosition - 1
+        //get the value between current and next delimiters or end of the line
+        val result = csvRecord.substring(startIndex, if(columnEndPosition!=-1) columnEndPosition else csvRecord.length)
+        //update current position to the next delimiter position or end of the line
+        currentPosition = if(columnEndPosition!=-1) columnEndPosition-1 else csvRecord.length
         return result
     }
 
     //"this, is"" test",
     private fun readQuoteColumn(): String {
         val token = StringBuffer()
-        var previousChar: Char? = null
         val currentColumn = csvRecord.substring(currentPosition + 1, csvRecord.length)
         var columnPosition = 0
         while (true) {
@@ -43,11 +42,10 @@ class Lexer(val csvRecord: String, val delimiter: Char) {
                 }
             }
             if (appendChar) token.append(currentChar)
-            previousChar = currentChar
             columnPosition++
         }
         currentColumn.substring(0, columnPosition)
-        currentPosition = currentPosition + columnPosition+1
+        currentPosition += columnPosition + 1
         return token.toString()
     }
 
@@ -70,10 +68,8 @@ class Lexer(val csvRecord: String, val delimiter: Char) {
                     val startIndex = if (currentChar == ",".single()) currentPosition + 1 else currentPosition
                     readRegularColumn(startIndex)
                 }
-                println(value)
                 result.add(value)
             }
-            previousChar = currentChar
             currentPosition++
         }
 
