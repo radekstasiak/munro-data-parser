@@ -10,7 +10,6 @@ TBC
 
 ## csv parsing rules
 Included parser applies following rules when to parse cvs files:
-- requires file to include following headers: `Name, Height (m), Grid Ref, Post 1997`
 - detects quoted fields and parses them as a single value, including special characters like:
     -  delimiter (by default:`,`)
     -  double `"` characters
