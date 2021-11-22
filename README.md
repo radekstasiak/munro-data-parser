@@ -8,9 +8,8 @@ to build library run `gradlew build` from the root directory, compiled `JAR` can
 ## usage
 TBC
 
-## CSV parsing rules
+## csv parsing rules
 Included parser applies following rules when to parse cvs files:
-- requires file to include following headers: `Name, Height (m), Grid Ref, Post 1997`
 - detects quoted fields and parses them as a single value, including special characters like:
     -  delimiter (by default:`,`)
     -  double `"` characters
@@ -18,7 +17,7 @@ Included parser applies following rules when to parse cvs files:
 - includes empty values
 
 
-## Known limitiation
+## known limitiations
 
 - inside a quote field, a multiple occurences of `"` character are transformed into single `"` character
 
