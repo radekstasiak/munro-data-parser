@@ -14,83 +14,98 @@ class MunroDataParser(
     private val delimiter: String
 ) {
 
-    private val requiredColumnList = listOf(
-        RequiredHeader.REQUIRED_HEADER_NAME,
-        RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS,
-        RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY,
-        RequiredHeader.REQUIRED_HEADER_GRID_REF,
-    )
+    //    private val requiredColumnList = listOf(
+//        RequiredHeader.REQUIRED_HEADER_NAME,
+//        RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS,
+//        RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY,
+//        RequiredHeader.REQUIRED_HEADER_GRID_REF,
+//    )
     private val munroDataRecordList: ArrayList<MunroDataRecord> = arrayListOf()
     private var headerList: List<String> = listOf()
-    private var requiredHeadersWithPosMap: HashMap<String, Int> = hashMapOf()
+//    private var requiredHeadersWithPosMap: HashMap<String, Int> = hashMapOf()
 
     init {
-            val scanner = Scanner(inputStream, "UTF-8")
-            var lineNumber = 0
-            while (scanner.hasNextLine()) {
-                var line = scanner.nextLine()
-                //ignore empty lines
-                while (line.isNullOrBlank()) {
-                    line = scanner.nextLine()
+        val scanner = Scanner(inputStream, "UTF-8")
+        var lineNumber = 0
+        while (scanner.hasNextLine()) {
+            var line = scanner.nextLine()
+            //ignore empty lines
+            while (line.isNullOrBlank()) {
+                line = scanner.nextLine()
+            }
+
+            if (lineNumber == 0) {
+                headerList = line.split(delimiter).map { it.trim() }
+//                    line.split(delimiter)
+//                        .forEachIndexed { index, value ->
+//                            if (requiredColumnList.map { it.value }
+//                                    .contains(value.trim())) requiredHeadersWithPosMap[value.trim()] =
+//                                index
+//                        }
+
+                //validate whether all the required headers exist
+                val headersValidation = validateHeaders()
+                if (headersValidation.isNotEmpty()) {
+                    throw IllegalArgumentException(headersValidation.toErrorMessage())
+                    break
                 }
 
-                if (lineNumber == 0) {
-                    headerList = line.split(delimiter).map { it.trim() }
-                    line.split(delimiter)
-                        .forEachIndexed { index, value ->
-                            if (requiredColumnList.map { it.value }
-                                    .contains(value.trim())) requiredHeadersWithPosMap[value.trim()] =
-                                index
-                        }
-
-                    //validate whether all the required headers exist
-                    val headersValidation = validateHeaders()
-                    if (headersValidation.isNotEmpty()) {
-                        throw IllegalArgumentException(headersValidation.toErrorMessage())
-                        break
+            } else {
+                val csvRecordParser = CSVRecordParser.instantiate(line, delimiter.single())
+                val row = csvRecordParser.result
+//                    val requiredHeaderNameColumnPos = requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_NAME.value]!!
+//                    val requiredColumnKeyHeightInMetersPos =
+//                        requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]!!
+//                    val requiredColumnKeyHillCategoryPos =
+//                        requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value]!!
+//                    val requiredColumnKeyGridRefPos =
+//                        requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value]!!
+                //row needs to have at least entry id, this way we can drop non munro data rows
+                if (row.size > 0 && row[0].isNotBlank()) {
+                    val fieldsMap = hashMapOf<String, String>()
+                    headerList.forEachIndexed { index, column ->
+                        fieldsMap[column] = if (row.size > index) row[index] else ""
                     }
-
-                } else {
-                    val csvRecordParser = CSVRecordParser.instantiate(line, delimiter.single())
-                    val row = csvRecordParser.result
-                    val requiredHeaderNameColumnPos = requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_NAME.value]!!
-                    val requiredColumnKeyHeightInMetersPos =
-                        requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]!!
-                    val requiredColumnKeyHillCategoryPos =
-                        requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value]!!
-                    val requiredColumnKeyGridRefPos =
-                        requiredHeadersWithPosMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value]!!
-
                     munroDataRecordList.add(
-                        MunroDataRecord(
-                            name = if (row.size > requiredHeaderNameColumnPos) row[requiredHeaderNameColumnPos] else "",
-                            heightInMeters = if (row.size > requiredColumnKeyHeightInMetersPos) row[requiredColumnKeyHeightInMetersPos] else "",
-                            hillCategory = if (row.size > requiredColumnKeyHillCategoryPos) row[requiredColumnKeyHillCategoryPos] else "",
-                            gridRef = if (row.size > requiredColumnKeyGridRefPos) row[requiredColumnKeyGridRefPos] else ""
-                        )
+                        MunroDataRecord(fieldsMap = fieldsMap)
                     )
                 }
-                lineNumber++
-
+                val fieldsMap = hashMapOf<String, String>()
+                headerList.forEachIndexed { index, column ->
+                    fieldsMap[column] = if (row.size > index) row[index] else ""
+                }
+//                munroDataRecordList.add(
+//                        MunroDataRecord(
+//                            name = if (row.size > requiredHeaderNameColumnPos) row[requiredHeaderNameColumnPos] else "",
+//                            heightInMeters = if (row.size > requiredColumnKeyHeightInMetersPos) row[requiredColumnKeyHeightInMetersPos] else "",
+//                            hillCategory = if (row.size > requiredColumnKeyHillCategoryPos) row[requiredColumnKeyHillCategoryPos] else "",
+//                            gridRef = if (row.size > requiredColumnKeyGridRefPos) row[requiredColumnKeyGridRefPos] else ""
+//                        )
+//                )
             }
+            lineNumber++
 
-            if (scanner.ioException() != null) {
-                throw scanner.ioException()
-            }
+        }
 
-            scanner.close()
+        if (scanner.ioException() != null) {
+            throw scanner.ioException()
+        }
+
+        scanner.close()
     }
 
     private fun validateHeaders(): List<RequiredHeaderValidationError> {
         val errorList = arrayListOf<RequiredHeaderValidationError>()
-        if (!requiredHeadersWithPosMap.containsKey(RequiredHeader.REQUIRED_HEADER_NAME.value)) errorList.add(RequiredHeaderValidationError.MISSING_NAME_HEADER)
-        if (!requiredHeadersWithPosMap.containsKey(RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value)) errorList.add(
+        if (!headerList.contains(RequiredHeader.REQUIRED_HEADER_NAME.value)) errorList.add(
+            RequiredHeaderValidationError.MISSING_NAME_HEADER
+        )
+        if (!headerList.contains(RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value)) errorList.add(
             RequiredHeaderValidationError.MISSING_HEIGHT_IN_METERS_HEADER
         )
-        if (!requiredHeadersWithPosMap.containsKey(RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value)) errorList.add(
+        if (!headerList.contains(RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value)) errorList.add(
             RequiredHeaderValidationError.MISSING_HILL_CATEGORY_HEADER
         )
-        if (!requiredHeadersWithPosMap.containsKey(RequiredHeader.REQUIRED_HEADER_GRID_REF.value)) errorList.add(
+        if (!headerList.contains(RequiredHeader.REQUIRED_HEADER_GRID_REF.value)) errorList.add(
             RequiredHeaderValidationError.MISSING_GRID_REF_HEADER
         )
 
@@ -112,8 +127,8 @@ class MunroDataParser(
     @JvmSynthetic
     internal fun getHeaders(): List<String> = headerList
 
-    @JvmSynthetic
-    internal fun getHeaderListMap(): Map<String, Int> = requiredHeadersWithPosMap
+//    @JvmSynthetic
+//    internal fun getHeaderListMap(): Map<String, Int> = requiredHeadersWithPosMap
 
     private enum class RequiredHeaderValidationError(val value: String) {
         MISSING_NAME_HEADER(value = "Name"),

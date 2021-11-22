@@ -8,7 +8,7 @@ internal class CSVRecordParser private constructor(private val csvRecord: String
     private var currentPosition = 0
 
 
-    // Use the companion object for your JvmSynthetic method to
+    // Use the companion object with JvmSynthetic method to
     // instantiate as it's not accessible from Java
     companion object {
         @JvmSynthetic
