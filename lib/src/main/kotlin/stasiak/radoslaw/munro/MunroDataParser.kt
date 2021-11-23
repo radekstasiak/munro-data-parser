@@ -102,9 +102,9 @@ class MunroDataParser(
         return filteredMunroRecords.map { munroDataRecord ->
             MunroDataModel(
                 name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
-                hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",
+                hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
                 heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value] ?: "",
-                gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
+                gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",
             )
         }
 
@@ -118,9 +118,8 @@ class MunroDataParser(
         val hillCatField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: ""
         val heightInMetersField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]?.toDoubleOrNull()
 
-        var isValidRecord = true
-        queryParams.entries.forEach { entry ->
-            isValidRecord = when (val query = entry.value) {
+        return !queryParams.entries.map { entry ->
+            when (val query = entry.value) {
                 is MunroDataQueryFilters.FilterByHilLCategory -> {
                     when (val hillCategory = query.hilLCategory) {
                         MunroDataQuery.MunroDataHillCategory.DEFAULT -> hillCatField == MunroDataQuery.MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataQuery.MunroDataHillCategory.TOP.value
@@ -132,9 +131,7 @@ class MunroDataParser(
                 is MunroDataQueryFilters.SetMinHeightInMeters -> heightInMetersField != null && heightInMetersField >= query.minHeight
 
             }
-        }
-
-        return isValidRecord
+        }.contains(false)
     }
 //    private fun validateHeaders(): List<RequiredHeaderValidationError> {
 //        val errorList = arrayListOf<RequiredHeaderValidationError>()
@@ -163,8 +160,8 @@ class MunroDataParser(
 //        return errorMessage.toString()
 //    }
 
-    @JvmSynthetic
-    internal fun getResults(): List<MunroDataRecord> = munroDataRecordList
+//    @JvmSynthetic
+//    internal fun getResults(): List<MunroDataRecord> = munroDataRecordList
 
     @JvmSynthetic
     internal fun getHeaders(): List<String> = headerList
