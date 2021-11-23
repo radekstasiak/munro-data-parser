@@ -1,12 +1,10 @@
 package stasiak.radoslaw.munro
 
+import stasiak.radoslaw.munro.model.MunroDataModel
 import stasiak.radoslaw.munro.model.MunroDataRecord
 import java.io.FileInputStream
-import java.io.IOException
-import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class MunroDataParser(
@@ -94,6 +92,50 @@ class MunroDataParser(
         scanner.close()
     }
 
+    fun getResults(query: MunroDataQuery): List<MunroDataModel> {
+        var filteredMunroRecords = munroDataRecordList.filter { munroDataRecord ->
+            filterMunroDataRecords(munroDataRecord.fieldsMap, query.filterParamsMap)
+        }
+        if (query.resultsLimit != null) {
+            filteredMunroRecords = filteredMunroRecords.take(query.resultsLimit)
+        }
+        return filteredMunroRecords.map { munroDataRecord ->
+            MunroDataModel(
+                name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
+                hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",
+                heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value] ?: "",
+                gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
+            )
+        }
+
+
+    }
+
+    private fun filterMunroDataRecords(
+        fieldsMap: Map<String, String>,
+        queryParams: Map<MunroDataQuery.MunroDataQueryParamName, MunroDataQueryFilters>
+    ): Boolean {
+        val hillCatField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: ""
+        val heightInMetersField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]?.toDoubleOrNull()
+
+        var isValidRecord = true
+        queryParams.entries.forEach { entry ->
+            isValidRecord = when (val query = entry.value) {
+                is MunroDataQueryFilters.FilterByHilLCategory -> {
+                    when (val hillCategory = query.hilLCategory) {
+                        MunroDataQuery.MunroDataHillCategory.DEFAULT -> hillCatField == MunroDataQuery.MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataQuery.MunroDataHillCategory.TOP.value
+                        else -> hillCatField == hillCategory.value
+                    }
+                }
+                is MunroDataQueryFilters.SetMaxHeightInMeters -> heightInMetersField != null && heightInMetersField <= query.maxHeight
+
+                is MunroDataQueryFilters.SetMinHeightInMeters -> heightInMetersField != null && heightInMetersField >= query.minHeight
+
+            }
+        }
+
+        return isValidRecord
+    }
 //    private fun validateHeaders(): List<RequiredHeaderValidationError> {
 //        val errorList = arrayListOf<RequiredHeaderValidationError>()
 //        if (!headerList.contains(RequiredHeader.REQUIRED_HEADER_NAME.value)) errorList.add(
@@ -130,17 +172,17 @@ class MunroDataParser(
 //    @JvmSynthetic
 //    internal fun getHeaderListMap(): Map<String, Int> = requiredHeadersWithPosMap
 
-//    private enum class RequiredHeaderValidationError(val value: String) {
+    //    private enum class RequiredHeaderValidationError(val value: String) {
 //        MISSING_NAME_HEADER(value = "Name"),
 //        MISSING_HEIGHT_IN_METERS_HEADER(value = "Height (m)"),
 //        MISSING_HILL_CATEGORY_HEADER(value = "Post 1997"),
 //        MISSING_GRID_REF_HEADER(value = "Grid Ref")
 //    }
 //
-//    private enum class RequiredHeader(val value: String) {
-//        REQUIRED_HEADER_NAME(value = "Name"),
-//        REQUIRED_HEADER_HEIGHT_IN_METERS(value = "Height (m)"),
-//        REQUIRED_HEADER_HILL_CATEGORY(value = "Post 1997"),
-//        REQUIRED_HEADER_GRID_REF(value = "Grid Ref")
-//    }
+    private enum class RequiredHeader(val value: String) {
+        REQUIRED_HEADER_NAME(value = "Name"),
+        REQUIRED_HEADER_HEIGHT_IN_METERS(value = "Height (m)"),
+        REQUIRED_HEADER_HILL_CATEGORY(value = "Post 1997"),
+        REQUIRED_HEADER_GRID_REF(value = "Grid Ref")
+    }
 }

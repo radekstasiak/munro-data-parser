@@ -21,33 +21,30 @@ class MunroDataQueryTest {
 
         assertEquals(
             MunroDataQuery.MunroDataHillCategory.MUNRO,
-            (munroDataQuery.paramsMap[MunroDataQuery.MunroDataQueryParamName.FILTER_BY_HILL_CAT] as MunroDataQueryParams.FilterByHilLCategory).hilLCategory
-        )
-
-        assertEquals(
-            true,
-            (munroDataQuery.paramsMap[MunroDataQuery.MunroDataQueryParamName.SORT_BY_HEIGHT_IN_M] as MunroDataQueryParams.SortByHeightInMeters).ascending
-        )
-
-        assertEquals(
-            true,
-            (munroDataQuery.paramsMap[MunroDataQuery.MunroDataQueryParamName.SORT_ALPHABETICALLY] as MunroDataQueryParams.SortAlphabeticallyByName).ascending
+            (munroDataQuery.filterParamsMap[MunroDataQuery.MunroDataQueryParamName.FILTER_BY_HILL_CAT] as MunroDataQueryFilters.FilterByHilLCategory).hilLCategory
         )
 
         assertEquals(
             12.12,
-            (munroDataQuery.paramsMap[MunroDataQuery.MunroDataQueryParamName.SET_MIN_HEIGHT_IN_M] as MunroDataQueryParams.SetMinHeightInMeters).minHeight
+            (munroDataQuery.filterParamsMap[MunroDataQuery.MunroDataQueryParamName.SET_MIN_HEIGHT_IN_M] as MunroDataQueryFilters.SetMinHeightInMeters).minHeight
         )
 
         assertEquals(
             23.12,
-            (munroDataQuery.paramsMap[MunroDataQuery.MunroDataQueryParamName.SET_MAX_HEIGHT_IN_M] as MunroDataQueryParams.SetMaxHeightInMeters).maxHeight
+            (munroDataQuery.filterParamsMap[MunroDataQuery.MunroDataQueryParamName.SET_MAX_HEIGHT_IN_M] as MunroDataQueryFilters.SetMaxHeightInMeters).maxHeight
         )
 
         assertEquals(
-            10,
-            (munroDataQuery.paramsMap[MunroDataQuery.MunroDataQueryParamName.SET_RESULTS_LIMIT] as MunroDataQueryParams.SetResultsLimit).resultsLimit
+            true,
+            (munroDataQuery.sortParamsMap[MunroDataQuery.MunroDataQueryParamName.SORT_BY_HEIGHT_IN_M] as MunroDataQuerySortingRules.SortByHeightInMeters).ascending
         )
+
+        assertEquals(
+            true,
+            (munroDataQuery.sortParamsMap[MunroDataQuery.MunroDataQueryParamName.SORT_ALPHABETICALLY] as MunroDataQuerySortingRules.SortAlphabeticallyByName).ascending
+        )
+
+        assertEquals(10, munroDataQuery.resultsLimit)
     }
 
     @Test
