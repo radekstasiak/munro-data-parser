@@ -99,7 +99,7 @@ class MunroDataParser(
         if (query.resultsLimit != null) {
             filteredMunroRecords = filteredMunroRecords.take(query.resultsLimit)
         }
-        return filteredMunroRecords.map { munroDataRecord ->
+        var munroDataModelList = filteredMunroRecords.map { munroDataRecord ->
             MunroDataModel(
                 name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
                 hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
@@ -108,6 +108,16 @@ class MunroDataParser(
             )
         }
 
+        query.sortParamsMap.entries.forEach { entry ->
+            munroDataModelList = when (val query = entry.value) {
+                is MunroDataQuerySortingRules.SortAlphabeticallyByName -> {
+                    if (query.ascending) munroDataModelList.sortedBy { it.name } else munroDataModelList.sortedByDescending { it.name }
+                }
+                is MunroDataQuerySortingRules.SortByHeightInMeters -> if (query.ascending) munroDataModelList.sortedBy { it.heightInMeters.toDoubleOrNull() } else munroDataModelList.sortedByDescending { it.heightInMeters.toDoubleOrNull() }
+            }
+        }
+
+        return munroDataModelList
 
     }
 
