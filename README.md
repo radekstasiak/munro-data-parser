@@ -16,13 +16,13 @@ gradlew build
 To use the library first you need to create an instance of the parser object providing csv file as an input stream
 
 ```Kotlin
-val parser = MunroDataParser(fileInputStream = yourfileInputStream)
+val parser = MunroDataParser(inputStream)
 ```
 
 By default parser will use `,` as the delimiter, if you want to use different one provide it via `delimiter` param
 
 ```Kotlin
-val parser = MunroDataParser(fileInputStream = yourfileInputStream, deilimiter = ".")
+val parser = MunroDataParser(fileInputStream = inputStream, deilimiter = ".")
 ```
 
 You can get list of parsed results using `getResults()` method which returns list of `MunroDataModel` objects
