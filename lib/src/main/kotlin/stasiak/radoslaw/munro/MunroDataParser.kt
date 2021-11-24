@@ -55,14 +55,15 @@ class MunroDataParser(
         scanner.close()
     }
 
-    fun getResults(query: MunroDataQuery): List<MunroDataModel> {
+    fun getResults(query: MunroDataQuery = MunroDataQuery.Builder().build()): List<MunroDataModel> {
         val munroDataModelList = munroDataRecordList.filter { munroDataRecord ->
             filterMunroDataRecords(munroDataRecord.fieldsMap, query.filterParamsMap)
         }.map { munroDataRecord ->
             MunroDataModel(
                 name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
                 hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
-                heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value] ?: "",
+                heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]?.toDoubleOrNull()
+                    ?: 0.0,
                 gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",
             )
         }
@@ -70,7 +71,7 @@ class MunroDataParser(
         val sortedMunroDataModelList = when (val sortingRule = query.sortingRule) {
             MunroDataQuerySortingRules.NoSorting -> munroDataModelList
             is MunroDataQuerySortingRules.SortAlphabeticallyByName -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.name } else munroDataModelList.sortedByDescending { it.name }
-            is MunroDataQuerySortingRules.SortByHeightInMeters -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.heightInMeters.toDoubleOrNull() } else munroDataModelList.sortedByDescending { it.heightInMeters.toDoubleOrNull() }
+            is MunroDataQuerySortingRules.SortByHeightInMeters -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.heightInMeters } else munroDataModelList.sortedByDescending { it.heightInMeters }
         }
 
         return if (query.resultsLimit != null) sortedMunroDataModelList.take(query.resultsLimit) else sortedMunroDataModelList
