@@ -2,6 +2,9 @@ package stasiak.radoslaw.munro
 
 import org.junit.Assert.assertThrows
 import org.junit.Test
+import stasiak.radoslaw.munro.MunroDataQuery.Companion.FILTER_BY_HILL_CAT
+import stasiak.radoslaw.munro.MunroDataQuery.Companion.SET_MAX_HEIGHT_IN_M
+import stasiak.radoslaw.munro.MunroDataQuery.Companion.SET_MIN_HEIGHT_IN_M
 import java.security.InvalidParameterException
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -15,7 +18,7 @@ class MunroDataQueryTest {
         assertEquals(1, munroDataQuery.filterParamsMap.size)
         assertEquals(
             MunroDataQuery.MunroDataHillCategory.DEFAULT,
-            (munroDataQuery.filterParamsMap[MunroDataQuery.MunroDataQueryParamName.FILTER_BY_HILL_CAT] as MunroDataQueryFilters.FilterByHilLCategory).hilLCategory
+            (munroDataQuery.filterParamsMap[FILTER_BY_HILL_CAT] as MunroDataQueryFilters.FilterByHilLCategory).hilLCategory
         )
         assertTrue(munroDataQuery.sortingRule is MunroDataQuerySortingRules.NoSorting)
         assertTrue(munroDataQuery.resultsLimit == null)
@@ -33,17 +36,17 @@ class MunroDataQueryTest {
 
         assertEquals(
             MunroDataQuery.MunroDataHillCategory.MUNRO,
-            (munroDataQuery.filterParamsMap[MunroDataQuery.MunroDataQueryParamName.FILTER_BY_HILL_CAT] as MunroDataQueryFilters.FilterByHilLCategory).hilLCategory
+            (munroDataQuery.filterParamsMap[FILTER_BY_HILL_CAT] as MunroDataQueryFilters.FilterByHilLCategory).hilLCategory
         )
 
         assertEquals(
             12.12,
-            (munroDataQuery.filterParamsMap[MunroDataQuery.MunroDataQueryParamName.SET_MIN_HEIGHT_IN_M] as MunroDataQueryFilters.SetMinHeightInMeters).minHeight
+            (munroDataQuery.filterParamsMap[SET_MIN_HEIGHT_IN_M] as MunroDataQueryFilters.SetMinHeightInMeters).minHeight
         )
 
         assertEquals(
             23.12,
-            (munroDataQuery.filterParamsMap[MunroDataQuery.MunroDataQueryParamName.SET_MAX_HEIGHT_IN_M] as MunroDataQueryFilters.SetMaxHeightInMeters).maxHeight
+            (munroDataQuery.filterParamsMap[SET_MAX_HEIGHT_IN_M] as MunroDataQueryFilters.SetMaxHeightInMeters).maxHeight
         )
 
         assertEquals(

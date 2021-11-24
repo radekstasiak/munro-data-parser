@@ -1,7 +1,6 @@
 package stasiak.radoslaw.munro
 
 import stasiak.radoslaw.munro.model.MunroDataModel
-import stasiak.radoslaw.munro.model.MunroDataRecord
 import java.io.FileInputStream
 import java.util.*
 import kotlin.collections.ArrayList
@@ -83,7 +82,7 @@ class MunroDataParser(
 
     private fun filterMunroDataRecords(
         fieldsMap: Map<String, String>,
-        queryParams: Map<MunroDataQuery.MunroDataQueryParamName, MunroDataQueryFilters>
+        queryParams: Map<String, MunroDataQueryFilters>
     ): Boolean {
         val hillCatField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: ""
         val heightInMetersField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]?.toDoubleOrNull()
@@ -113,4 +112,8 @@ class MunroDataParser(
         REQUIRED_HEADER_HILL_CATEGORY(value = "Post 1997"),
         REQUIRED_HEADER_GRID_REF(value = "Grid Ref")
     }
+
+    private data class MunroDataRecord(
+        val fieldsMap: HashMap<String, String>
+    )
 }
