@@ -1,25 +1,26 @@
 package stasiak.radoslaw.munro
 
 import stasiak.radoslaw.munro.model.MunroDataModel
-import java.io.FileInputStream
+import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class MunroDataParser(
-    private val inputStream: FileInputStream,
+    private val inputStream: InputStream,
     private val delimiter: Char = ",".single()
 ) {
     private val munroDataRecordList: ArrayList<MunroDataRecord> = arrayListOf()
     private var headerList: List<String> = listOf()
 
     init {
-        val scanner = Scanner(inputStream, "UTF-8")
+        val reader = inputStream.bufferedReader()
+        val iterator = reader.lineSequence().iterator()
         var lineNumber = 0
-        while (scanner.hasNextLine()) {
-            var line = scanner.nextLine()
+        while (iterator.hasNext()) {
+            var line = iterator.next()
             while (line.isNullOrBlank()) {
-                line = scanner.nextLine()
+                line = iterator.next()
             }
 
             if (lineNumber == 0) {
@@ -47,11 +48,7 @@ class MunroDataParser(
 
         }
 
-        if (scanner.ioException() != null) {
-            throw scanner.ioException()
-        }
-
-        scanner.close()
+        reader.close()
     }
 
     fun getResults(query: MunroDataQuery = MunroDataQuery.Builder().build()): List<MunroDataModel> {
