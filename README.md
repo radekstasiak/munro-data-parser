@@ -50,7 +50,7 @@ you can add multiple filters and define sorting behaviour using `MunroDataQuery.
                             .setMinHeightInMeters(945.7) //double
                             .setMaxHeightInMeters(948.0) //double
                             .setResultsLimit(3) //int
-                            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(ascending = true) // or SortAlphabeticallyByName(ascending)
+                            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(ascending = true) // or SortAlphabeticallyByName(ascending:Boolean)
                             .build()
 
     parser.getResults(query = munroDataQuery)
