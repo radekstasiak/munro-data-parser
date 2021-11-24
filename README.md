@@ -61,7 +61,7 @@ available filters are defined in the `MunroDataQueryFilters` class
 
 ```Kotlin
 enum class MunroDataHillCategory(val value: String) {
-    DEFAULT(value = ""), //user in parser by default and returns either Munro or Top hills
+    EITHER(value = ""), //used in parser by default and returns either Munro or Top hills
     MUNRO(value = "MUN"),
     TOP(value = "TOP")
 }
