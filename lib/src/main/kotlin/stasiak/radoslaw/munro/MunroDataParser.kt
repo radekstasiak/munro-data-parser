@@ -1,26 +1,26 @@
 package stasiak.radoslaw.munro
 
 import stasiak.radoslaw.munro.model.MunroDataModel
-import stasiak.radoslaw.munro.model.MunroDataRecord
-import java.io.FileInputStream
+import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class MunroDataParser(
-    private val inputStream: FileInputStream,
+    private val inputStream: InputStream,
     private val delimiter: Char = ",".single()
 ) {
     private val munroDataRecordList: ArrayList<MunroDataRecord> = arrayListOf()
     private var headerList: List<String> = listOf()
 
     init {
-        val scanner = Scanner(inputStream, "UTF-8")
+        val reader = inputStream.bufferedReader()
+        val iterator = reader.lineSequence().iterator()
         var lineNumber = 0
-        while (scanner.hasNextLine()) {
-            var line = scanner.nextLine()
+        while (iterator.hasNext()) {
+            var line = iterator.next()
             while (line.isNullOrBlank()) {
-                line = scanner.nextLine()
+                line = iterator.next()
             }
 
             if (lineNumber == 0) {
@@ -48,21 +48,22 @@ class MunroDataParser(
 
         }
 
-        if (scanner.ioException() != null) {
-            throw scanner.ioException()
-        }
-
-        scanner.close()
+        reader.close()
     }
 
-    fun getResults(query: MunroDataQuery): List<MunroDataModel> {
+    fun getResults(query: MunroDataQuery = MunroDataQuery.Builder().build()): List<MunroDataModel> {
         val munroDataModelList = munroDataRecordList.filter { munroDataRecord ->
             filterMunroDataRecords(munroDataRecord.fieldsMap, query.filterParamsMap)
         }.map { munroDataRecord ->
             MunroDataModel(
                 name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
-                hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
-                heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value] ?: "",
+                hillCategory = when (munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value]) {
+                    "MUN" -> "Munro"
+                    "TOP" -> "Munro Top"
+                    else -> ""
+                },
+                heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]?.toDoubleOrNull()
+                    ?: 0.0,
                 gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",
             )
         }
@@ -70,7 +71,7 @@ class MunroDataParser(
         val sortedMunroDataModelList = when (val sortingRule = query.sortingRule) {
             MunroDataQuerySortingRules.NoSorting -> munroDataModelList
             is MunroDataQuerySortingRules.SortAlphabeticallyByName -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.name } else munroDataModelList.sortedByDescending { it.name }
-            is MunroDataQuerySortingRules.SortByHeightInMeters -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.heightInMeters.toDoubleOrNull() } else munroDataModelList.sortedByDescending { it.heightInMeters.toDoubleOrNull() }
+            is MunroDataQuerySortingRules.SortByHeightInMeters -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.heightInMeters } else munroDataModelList.sortedByDescending { it.heightInMeters }
         }
 
         return if (query.resultsLimit != null) sortedMunroDataModelList.take(query.resultsLimit) else sortedMunroDataModelList
@@ -78,7 +79,7 @@ class MunroDataParser(
 
     private fun filterMunroDataRecords(
         fieldsMap: Map<String, String>,
-        queryParams: Map<MunroDataQuery.MunroDataQueryParamName, MunroDataQueryFilters>
+        queryParams: Map<String, MunroDataQueryFilters>
     ): Boolean {
         val hillCatField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: ""
         val heightInMetersField = fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]?.toDoubleOrNull()
@@ -87,7 +88,7 @@ class MunroDataParser(
             when (val query = entry.value) {
                 is MunroDataQueryFilters.FilterByHilLCategory -> {
                     when (val hillCategory = query.hilLCategory) {
-                        MunroDataQuery.MunroDataHillCategory.DEFAULT -> hillCatField == MunroDataQuery.MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataQuery.MunroDataHillCategory.TOP.value
+                        MunroDataQuery.MunroDataHillCategory.EITHER -> hillCatField == MunroDataQuery.MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataQuery.MunroDataHillCategory.TOP.value
                         else -> hillCatField == hillCategory.value
                     }
                 }
@@ -108,4 +109,8 @@ class MunroDataParser(
         REQUIRED_HEADER_HILL_CATEGORY(value = "Post 1997"),
         REQUIRED_HEADER_GRID_REF(value = "Grid Ref")
     }
+
+    private data class MunroDataRecord(
+        val fieldsMap: HashMap<String, String>
+    )
 }
