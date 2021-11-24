@@ -93,13 +93,9 @@ class MunroDataParser(
     }
 
     fun getResults(query: MunroDataQuery): List<MunroDataModel> {
-        var filteredMunroRecords = munroDataRecordList.filter { munroDataRecord ->
+        val munroDataModelList = munroDataRecordList.filter { munroDataRecord ->
             filterMunroDataRecords(munroDataRecord.fieldsMap, query.filterParamsMap)
-        }
-        if (query.resultsLimit != null) {
-            filteredMunroRecords = filteredMunroRecords.take(query.resultsLimit)
-        }
-        var munroDataModelList = filteredMunroRecords.map { munroDataRecord ->
+        }.map { munroDataRecord ->
             MunroDataModel(
                 name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
                 hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
@@ -107,19 +103,43 @@ class MunroDataParser(
                 gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",
             )
         }
+//        if (query.resultsLimit != null) {
+//            filteredMunroRecords = filteredMunroRecords.take(query.resultsLimit)
+//        }
+//        var munroDataModelList = filteredMunroRecords.map { munroDataRecord ->
+//            MunroDataModel(
+//                name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
+//                hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
+//                heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value] ?: "",
+//                gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",
+//            )
+//        }
 
-        query.sortParamsMap.entries.forEach { entry ->
-            munroDataModelList = when (val query = entry.value) {
-                is MunroDataQuerySortingRules.SortAlphabeticallyByName -> {
-                    if (query.ascending) munroDataModelList.sortedBy { it.name } else munroDataModelList.sortedByDescending { it.name }
-                }
-                is MunroDataQuerySortingRules.SortByHeightInMeters -> if (query.ascending) munroDataModelList.sortedBy { it.heightInMeters.toDoubleOrNull() } else munroDataModelList.sortedByDescending { it.heightInMeters.toDoubleOrNull() }
-            }
+        val sortedMunroDataModelList = when (val sortingRule = query.sortingRule) {
+            MunroDataQuerySortingRules.NoSorting -> munroDataModelList
+            is MunroDataQuerySortingRules.SortAlphabeticallyByName -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.name } else munroDataModelList.sortedByDescending { it.name }
+            is MunroDataQuerySortingRules.SortByHeightInMeters -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.heightInMeters.toDoubleOrNull() } else munroDataModelList.sortedByDescending { it.heightInMeters.toDoubleOrNull() }
         }
 
-        return munroDataModelList
-
+        return if (query.resultsLimit != null) sortedMunroDataModelList.take(query.resultsLimit) else sortedMunroDataModelList
     }
+
+//    private fun sortData(
+//        queryParams: Map<MunroDataQuery.MunroDataQueryParamName, MunroDataQuerySortingRules>,
+//        list: List<MunroDataModel>
+//    ) {
+//        var result = list
+//        result.sortedWith { compareB<MunroDataModel> { it.name }.thenBy {  } }
+//        queryParams.entries.forEach { entry ->
+//            result = when (val query = entry.value) {
+//                is MunroDataQuerySortingRules.SortAlphabeticallyByName -> {
+//                    if (query.ascending) list.sortedBy { it.name } else list.sortedByDescending { it.name }
+//                }
+//                is MunroDataQuerySortingRules.SortByHeightInMeters -> if (query.ascending) list.sortedBy { it.heightInMeters.toDoubleOrNull() } else list.sortedByDescending { it.heightInMeters.toDoubleOrNull() }
+//            }
+//        }
+//
+//    }
 
     private fun filterMunroDataRecords(
         fieldsMap: Map<String, String>,

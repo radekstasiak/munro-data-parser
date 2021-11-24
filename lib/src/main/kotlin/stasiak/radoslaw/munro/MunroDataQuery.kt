@@ -4,7 +4,7 @@ import java.security.InvalidParameterException
 
 class MunroDataQuery private constructor(
     @JvmSynthetic internal val filterParamsMap: HashMap<MunroDataQueryParamName, MunroDataQueryFilters>,
-    @JvmSynthetic internal val sortParamsMap: HashMap<MunroDataQueryParamName, MunroDataQuerySortingRules>,
+    @JvmSynthetic internal var sortingRule: MunroDataQuerySortingRules,
     @JvmSynthetic internal val resultsLimit: Int? = null,
 ) {
 
@@ -14,34 +14,29 @@ class MunroDataQuery private constructor(
                 MunroDataHillCategory.DEFAULT
             )
         ),
-        private val sortParams: HashMap<MunroDataQueryParamName, MunroDataQuerySortingRules> = hashMapOf(),
+        private var sortingRule: MunroDataQuerySortingRules = MunroDataQuerySortingRules.NoSorting,
         private var resultsLimit: Int? = null,
 
         ) {
+
         fun filterByHillCategory(hilLCategory: MunroDataHillCategory) = apply {
-            filterParams[MunroDataQueryParamName.FILTER_BY_HILL_CAT] =
+            this.filterParams[MunroDataQueryParamName.FILTER_BY_HILL_CAT] =
                 MunroDataQueryFilters.FilterByHilLCategory(hilLCategory)
         }
 
 
         fun setMinHeightInMeters(minHeight: Double) = apply {
-            filterParams[MunroDataQueryParamName.SET_MIN_HEIGHT_IN_M] =
+            this.filterParams[MunroDataQueryParamName.SET_MIN_HEIGHT_IN_M] =
                 MunroDataQueryFilters.SetMinHeightInMeters(minHeight)
         }
 
         fun setMaxHeightInMeters(maxHeight: Double) = apply {
-            filterParams[MunroDataQueryParamName.SET_MAX_HEIGHT_IN_M] =
+            this.filterParams[MunroDataQueryParamName.SET_MAX_HEIGHT_IN_M] =
                 MunroDataQueryFilters.SetMaxHeightInMeters(maxHeight)
         }
 
-        fun sortByHeightInMeters(ascending: Boolean) = apply {
-            sortParams[MunroDataQueryParamName.SORT_BY_HEIGHT_IN_M] =
-                MunroDataQuerySortingRules.SortByHeightInMeters(ascending)
-        }
-
-        fun sortAlphabeticallyByName(ascending: Boolean) = apply {
-            sortParams[MunroDataQueryParamName.SORT_ALPHABETICALLY] =
-                MunroDataQuerySortingRules.SortAlphabeticallyByName(ascending)
+        fun setSortingRule(sortingRule: MunroDataQuerySortingRules) = apply {
+            this.sortingRule = sortingRule
         }
 
         fun setResultsLimit(resultsLimit: Int) = apply {
@@ -61,7 +56,7 @@ class MunroDataQuery private constructor(
             }
             return MunroDataQuery(
                 filterParamsMap = this.filterParams,
-                sortParamsMap = this.sortParams,
+                sortingRule = this.sortingRule,
                 resultsLimit = resultsLimit
             )
         }
@@ -112,11 +107,13 @@ class MunroDataQuery private constructor(
 sealed class MunroDataQueryFilters {
     data class FilterByHilLCategory(val hilLCategory: MunroDataQuery.MunroDataHillCategory = MunroDataQuery.MunroDataHillCategory.DEFAULT) :
         MunroDataQueryFilters()
+
     data class SetMinHeightInMeters(val minHeight: Double) : MunroDataQueryFilters()
     data class SetMaxHeightInMeters(val maxHeight: Double) : MunroDataQueryFilters()
 }
 
 sealed class MunroDataQuerySortingRules {
-    data class SortByHeightInMeters(val ascending: Boolean) : MunroDataQuerySortingRules()
-    data class SortAlphabeticallyByName(val ascending: Boolean) : MunroDataQuerySortingRules()
+    object NoSorting : MunroDataQuerySortingRules()
+    data class SortByHeightInMeters(val ascending: Boolean = false) : MunroDataQuerySortingRules()
+    data class SortAlphabeticallyByName(val ascending: Boolean = false) : MunroDataQuerySortingRules()
 }
