@@ -20,14 +20,14 @@ class MunroDataParserTest {
 
     @Test
     fun `parser maps results correctly when no Query provided`() {
-        val parser = MunroDataParser(testDataFileInputStream, ",")
+        val parser = MunroDataParser(testDataFileInputStream,)
         val munroDataQuery = MunroDataQuery.Builder().build()
         assertEquals(509, parser.getResults(munroDataQuery).size)
     }
 
     @Test
     fun `parser reads headers correctly`() {
-        val parser = MunroDataParser(testDataFileInputStream, ",")
+        val parser = MunroDataParser(testDataFileInputStream)
         assertEquals(29, parser.getHeaders().size)
     }
 
@@ -36,7 +36,7 @@ class MunroDataParserTest {
     fun `parser ignores empty line`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_empty_line.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder().build()
         assertEquals(2, parser.getResults(munroDataQuery).size)
         assertEquals(29, parser.getHeaders().size)
@@ -46,7 +46,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder().build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -77,7 +77,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly when FilterByHilLCategory is TOP`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery =
             MunroDataQuery.Builder().filterByHillCategory(MunroDataQuery.MunroDataHillCategory.TOP).build()
         val munroDataResults = parser.getResults(munroDataQuery)
@@ -109,7 +109,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly when FilterByHilLCategory is MUNRO`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery =
             MunroDataQuery.Builder().filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO).build()
         val munroDataResults = parser.getResults(munroDataQuery)
@@ -141,7 +141,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly when SetMinHeightInMeters is active`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder().setMinHeightInMeters(942.0).build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -172,7 +172,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly when SetMaxHeightInMeters is active`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder().setMaxHeightInMeters(942.0).build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -203,7 +203,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly when maxResults is set`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder().setResultsLimit(3).build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -229,7 +229,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly when multiple filters are set`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
             .filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO)
             .setMaxHeightInMeters(1100.0)
@@ -249,7 +249,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel and returns result sorted alphabetically in ascending order`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
             .setSortingRule(sortingRule = MunroDataQuerySortingRules.SortAlphabeticallyByName(true))
             .build()
@@ -303,7 +303,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel and returns result sorted alphabetically in descending order`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
             .setSortingRule(MunroDataQuerySortingRules.SortAlphabeticallyByName())
             .build()
@@ -358,7 +358,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel and returns result sorted by height in ascending order`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
             .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(true))
             .build()
@@ -412,7 +412,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel and returns result sorted by height in descending order`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
+        val parser = MunroDataParser(reorderedHeadersDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
             .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(false))
             .build()
@@ -463,7 +463,7 @@ class MunroDataParserTest {
 
     @Test
     fun `parser maps MunroDataRecord to MunroDataModel correctly when multiple filters and sorting rule are set`() {
-        val parser = MunroDataParser(testDataFileInputStream, ",")
+        val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
             .filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO)
             .setMinHeightInMeters(945.7)
@@ -492,54 +492,6 @@ class MunroDataParserTest {
         assertEquals("NG946113", munroDataResults[2].gridRef)
     }
 
-//    @Test
-//    fun `parsers map MunroDataRecords correctly when required columns are missing`() {
-//        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_required_columns_missing.csv")!!
-//        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-//        val parser = MunroDataParser(reorderedHeadersDataFileInputStream, ",")
-//        val munroDataQuery = MunroDataQuery.Builder().build()
-//        val munroDataResults = parser.getResults(munroDataQuery)
-//
-//        assertEquals(1, munroDataResults.size)
-
-//        assertEquals("", munroDatRecords[0].name)
-//        assertEquals("", munroDatRecords[0].heightInMeters)
-//        assertEquals("", munroDatRecords[0].hillCategory)
-//        assertEquals("", munroDatRecords[0].gridRef)
-//    }
-//
-//    @Test
-//    fun `parsers throws exception with correct message when Name header is missing`() {
-//        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_header_name_missing.csv")!!
-//        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-//
-//        val exception = assertThrows(IllegalArgumentException::class.java) {
-//            MunroDataParser(reorderedHeadersDataFileInputStream, ",")
-//        }
-//        assertEquals("Required headers are missing:`Name`", exception.message)
-//    }
-//
-//    @Test
-//    fun `parsers throws exception with correct message when Grid Ref header is missing`() {
-//        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_header_gridref_missing.csv")!!
-//        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-//
-//        val exception = assertThrows(IllegalArgumentException::class.java) {
-//            MunroDataParser(reorderedHeadersDataFileInputStream, ",")
-//        }
-//        assertEquals("Required headers are missing:`Grid Ref`", exception.message)
-//    }
-//
-//    @Test
-//    fun `parsers throws exception with correct message when all of the required headers are missing`() {
-//        val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_all_required_headers_missing.csv")!!
-//        val reorderedHeadersDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
-//
-//        val exception = assertThrows(IllegalArgumentException::class.java) {
-//            MunroDataParser(reorderedHeadersDataFileInputStream, ",")
-//        }
-//        assertEquals("Required headers are missing:`Name`,`Height (m)`,`Post 1997`,`Grid Ref`", exception.message)
-//    }
 
 
 }

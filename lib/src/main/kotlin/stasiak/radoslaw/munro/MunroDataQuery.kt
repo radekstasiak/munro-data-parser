@@ -64,15 +64,10 @@ class MunroDataQuery private constructor(
         @JvmSynthetic
         internal fun validateParams(): List<String> {
             val results = arrayListOf<String>()
-//            if (this.filterParams.containsKey(MunroDataQueryParamName.SET_RESULTS_LIMIT)) {
-//                val resultsLimit =
-//                    (this.filterParams[MunroDataQueryParamName.SET_RESULTS_LIMIT] as MunroDataQueryParams.SetResultsLimit).resultsLimit
             resultsLimit?.let { limit ->
                 if (limit <= 0)
                     results.add("Results limit must be greater then 0")
             }
-//            }
-
             if (this.filterParams.containsKey(MunroDataQueryParamName.SET_MIN_HEIGHT_IN_M) &&
                 this.filterParams.containsKey(MunroDataQueryParamName.SET_MAX_HEIGHT_IN_M)
             ) {
@@ -95,11 +90,8 @@ class MunroDataQuery private constructor(
 
     enum class MunroDataQueryParamName {
         FILTER_BY_HILL_CAT,
-        SORT_BY_HEIGHT_IN_M,
-        SORT_ALPHABETICALLY,
         SET_MIN_HEIGHT_IN_M,
         SET_MAX_HEIGHT_IN_M,
-//        SET_RESULTS_LIMIT
     }
 
 }
