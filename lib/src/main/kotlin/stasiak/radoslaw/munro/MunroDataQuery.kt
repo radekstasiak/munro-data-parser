@@ -23,7 +23,7 @@ class MunroDataQuery private constructor(
 data class Builder(
     private val filterParams: HashMap<String, MunroDataQueryFilters> = hashMapOf(
         FILTER_BY_HILL_CAT to MunroDataQueryFilters.FilterByHilLCategory(
-            MunroDataHillCategory.DEFAULT
+            MunroDataHillCategory.EITHER
         )
     ),
     private var sortingRule: MunroDataQuerySortingRules = MunroDataQuerySortingRules.NoSorting,
@@ -97,13 +97,13 @@ data class Builder(
 
 
 enum class MunroDataHillCategory(val value: String) {
-    DEFAULT(value = ""), MUNRO(value = "MUN"), TOP(value = "TOP")
+    EITHER(value = ""), MUNRO(value = "MUN"), TOP(value = "TOP")
 }
 
 }
 
 sealed class MunroDataQueryFilters {
-    data class FilterByHilLCategory(val hilLCategory: MunroDataQuery.MunroDataHillCategory = MunroDataQuery.MunroDataHillCategory.DEFAULT) :
+    data class FilterByHilLCategory(val hilLCategory: MunroDataQuery.MunroDataHillCategory = MunroDataQuery.MunroDataHillCategory.EITHER) :
         MunroDataQueryFilters()
 
     data class SetMinHeightInMeters(val minHeight: Double) : MunroDataQueryFilters()

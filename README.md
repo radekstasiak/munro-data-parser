@@ -47,10 +47,10 @@ you can add multiple filters and define sorting behaviour using `MunroDataQuery.
 
 ```Kotlin
      val munroDataQuery = MunroDataQuery.Builder()
-                            .filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO)
-                            .setMinHeightInMeters(945.7)
-                            .setMaxHeightInMeters(948.0)
-                            .setResultsLimit(3)
+                            .filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO) //MUNRO, TOP or DEFAULT
+                            .setMinHeightInMeters(945.7) //double
+                            .setMaxHeightInMeters(948.0) //double
+                            .setResultsLimit(3) //int
                             .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(ascending = true))
                             .build()
 
@@ -61,15 +61,6 @@ you can add multiple filters and define sorting behaviour using `MunroDataQuery.
 available filters are defined in the `MunroDataQueryFilters` class
 
 ```Kotlin
-sealed class MunroDataQueryFilters {
-    data class FilterByHilLCategory(
-        val hilLCategory: MunroDataQuery.MunroDataHillCategory = MunroDataQuery.MunroDataHillCategory.DEFAULT
-    ) : MunroDataQueryFilters()
-
-    data class SetMinHeightInMeters(val minHeight: Double) : MunroDataQueryFilters()
-    data class SetMaxHeightInMeters(val maxHeight: Double) : MunroDataQueryFilters()
-}
-
 enum class MunroDataHillCategory(val value: String) {
     DEFAULT(value = ""), //user in parser by default and returns either Munro or Top hills
     MUNRO(value = "MUN"),

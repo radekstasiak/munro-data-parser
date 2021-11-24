@@ -17,7 +17,7 @@ class MunroDataQueryTest {
 
         assertEquals(1, munroDataQuery.filterParamsMap.size)
         assertEquals(
-            MunroDataQuery.MunroDataHillCategory.DEFAULT,
+            MunroDataQuery.MunroDataHillCategory.EITHER,
             (munroDataQuery.filterParamsMap[FILTER_BY_HILL_CAT] as MunroDataQueryFilters.FilterByHilLCategory).hilLCategory
         )
         assertTrue(munroDataQuery.sortingRule is MunroDataQuerySortingRules.NoSorting)

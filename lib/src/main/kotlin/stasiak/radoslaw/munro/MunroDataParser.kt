@@ -91,7 +91,7 @@ class MunroDataParser(
             when (val query = entry.value) {
                 is MunroDataQueryFilters.FilterByHilLCategory -> {
                     when (val hillCategory = query.hilLCategory) {
-                        MunroDataQuery.MunroDataHillCategory.DEFAULT -> hillCatField == MunroDataQuery.MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataQuery.MunroDataHillCategory.TOP.value
+                        MunroDataQuery.MunroDataHillCategory.EITHER -> hillCatField == MunroDataQuery.MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataQuery.MunroDataHillCategory.TOP.value
                         else -> hillCatField == hillCategory.value
                     }
                 }
