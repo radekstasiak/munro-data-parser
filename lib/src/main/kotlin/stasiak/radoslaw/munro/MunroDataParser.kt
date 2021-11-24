@@ -61,7 +61,11 @@ class MunroDataParser(
         }.map { munroDataRecord ->
             MunroDataModel(
                 name = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_NAME.value] ?: "",
-                hillCategory = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value] ?: "",
+                hillCategory = when (munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HILL_CATEGORY.value]) {
+                    "MUN" -> "Munro"
+                    "TOP" -> "Munro Top"
+                    else -> ""
+                },
                 heightInMeters = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_HEIGHT_IN_METERS.value]?.toDoubleOrNull()
                     ?: 0.0,
                 gridRef = munroDataRecord.fieldsMap[RequiredHeader.REQUIRED_HEADER_GRID_REF.value] ?: "",

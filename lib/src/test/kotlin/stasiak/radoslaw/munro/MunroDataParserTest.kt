@@ -51,27 +51,27 @@ class MunroDataParserTest {
 
         assertEquals("Ben Chonzie", munroDataResults[0].name)
         assertEquals(931.0, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NN773308", munroDataResults[0].gridRef)
 
         assertEquals("", munroDataResults[2].name)
         assertEquals(1216.0, munroDataResults[2].heightInMeters)
-        assertEquals("TOP", munroDataResults[2].hillCategory)
+        assertEquals("Munro Top", munroDataResults[2].hillCategory)
         assertEquals("NH985025", munroDataResults[2].gridRef)
 
         assertEquals("Sgurr na Banachdich", munroDataResults[4].name)
         assertEquals(0.0, munroDataResults[4].heightInMeters)
-        assertEquals("MUN", munroDataResults[4].hillCategory)
+        assertEquals("Munro", munroDataResults[4].hillCategory)
         assertEquals("NG440224", munroDataResults[4].gridRef)
 
         assertEquals("Bla Bheinn SW Top", munroDataResults[6].name)
         assertEquals(926.5, munroDataResults[6].heightInMeters)
-        assertEquals("TOP", munroDataResults[6].hillCategory)
+        assertEquals("Munro Top", munroDataResults[6].hillCategory)
         assertEquals("NG528215", munroDataResults[6].gridRef)
     }
 
     @Test
-    fun `parser maps MunroDataRecord to MunroDataModel correctly when FilterByHilLCategory is TOP`() {
+    fun `parser maps MunroDataRecord to MunroDataModel correctly when FilterByHilLCategory is Munro Top`() {
         val resource: URL = MunroDataParserTest::class.java.getResource("/munrotab_10_results.csv")!!
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
@@ -83,22 +83,22 @@ class MunroDataParserTest {
 
         assertEquals("", munroDataResults[0].name)
         assertEquals(1216.0, munroDataResults[0].heightInMeters)
-        assertEquals("TOP", munroDataResults[0].hillCategory)
+        assertEquals("Munro Top", munroDataResults[0].hillCategory)
         assertEquals("NH985025", munroDataResults[0].gridRef)
 
         assertEquals("Meall Gorm SE Top", munroDataResults[1].name)
         assertEquals(922.0, munroDataResults[1].heightInMeters)
-        assertEquals("TOP", munroDataResults[1].hillCategory)
+        assertEquals("Munro Top", munroDataResults[1].hillCategory)
         assertEquals("NH232691", munroDataResults[1].gridRef)
 
         assertEquals("Sgurr na Banachdich Central Top", munroDataResults[2].name)
         assertEquals(942.0, munroDataResults[2].heightInMeters)
-        assertEquals("TOP", munroDataResults[2].hillCategory)
+        assertEquals("Munro Top", munroDataResults[2].hillCategory)
         assertEquals("NG441222", munroDataResults[2].gridRef)
 
         assertEquals("Bla Bheinn SW Top", munroDataResults[3].name)
         assertEquals(926.5, munroDataResults[3].heightInMeters)
-        assertEquals("TOP", munroDataResults[3].hillCategory)
+        assertEquals("Munro Top", munroDataResults[3].hillCategory)
         assertEquals("NG528215", munroDataResults[3].gridRef)
     }
 
@@ -115,22 +115,22 @@ class MunroDataParserTest {
 
         assertEquals("Ben Chonzie", munroDataResults[0].name)
         assertEquals(931.0, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NN773308", munroDataResults[0].gridRef)
 
         assertEquals("Ben Vorlich", munroDataResults[1].name)
         assertEquals(985.0, munroDataResults[1].heightInMeters)
-        assertEquals("MUN", munroDataResults[1].hillCategory)
+        assertEquals("Munro", munroDataResults[1].hillCategory)
         assertEquals("NN629189", munroDataResults[1].gridRef)
 
         assertEquals("Sgurr na Banachdich", munroDataResults[2].name)
         assertEquals(0.0, munroDataResults[2].heightInMeters)
-        assertEquals("MUN", munroDataResults[2].hillCategory)
+        assertEquals("Munro", munroDataResults[2].hillCategory)
         assertEquals("NG440224", munroDataResults[2].gridRef)
 
         assertEquals("Ben More", munroDataResults[3].name)
         assertEquals(966.0, munroDataResults[3].heightInMeters)
-        assertEquals("MUN", munroDataResults[3].hillCategory)
+        assertEquals("Munro", munroDataResults[3].hillCategory)
         assertEquals("", munroDataResults[3].gridRef)
     }
 
@@ -146,22 +146,22 @@ class MunroDataParserTest {
 
         assertEquals("Ben Vorlich", munroDataResults[0].name)
         assertEquals(985.0, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NN629189", munroDataResults[0].gridRef)
 
         assertEquals("", munroDataResults[1].name)
         assertEquals(1216.0, munroDataResults[1].heightInMeters)
-        assertEquals("TOP", munroDataResults[1].hillCategory)
+        assertEquals("Munro Top", munroDataResults[1].hillCategory)
         assertEquals("NH985025", munroDataResults[1].gridRef)
 
         assertEquals("Sgurr na Banachdich Central Top", munroDataResults[2].name)
         assertEquals(942.0, munroDataResults[2].heightInMeters)
-        assertEquals("TOP", munroDataResults[2].hillCategory)
+        assertEquals("Munro Top", munroDataResults[2].hillCategory)
         assertEquals("NG441222", munroDataResults[2].gridRef)
 
         assertEquals("Ben More", munroDataResults[3].name)
         assertEquals(966.0, munroDataResults[3].heightInMeters)
-        assertEquals("MUN", munroDataResults[3].hillCategory)
+        assertEquals("Munro", munroDataResults[3].hillCategory)
         assertEquals("", munroDataResults[3].gridRef)
     }
 
@@ -177,22 +177,22 @@ class MunroDataParserTest {
 
         assertEquals("Ben Chonzie", munroDataResults[0].name)
         assertEquals(931.0, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NN773308", munroDataResults[0].gridRef)
 
         assertEquals("Meall Gorm SE Top", munroDataResults[1].name)
         assertEquals(922.0, munroDataResults[1].heightInMeters)
-        assertEquals("TOP", munroDataResults[1].hillCategory)
+        assertEquals("Munro Top", munroDataResults[1].hillCategory)
         assertEquals("NH232691", munroDataResults[1].gridRef)
 
         assertEquals("Sgurr na Banachdich Central Top", munroDataResults[2].name)
         assertEquals(942.0, munroDataResults[2].heightInMeters)
-        assertEquals("TOP", munroDataResults[2].hillCategory)
+        assertEquals("Munro Top", munroDataResults[2].hillCategory)
         assertEquals("NG441222", munroDataResults[2].gridRef)
 
         assertEquals("Bla Bheinn SW Top", munroDataResults[3].name)
         assertEquals(926.5, munroDataResults[3].heightInMeters)
-        assertEquals("TOP", munroDataResults[3].hillCategory)
+        assertEquals("Munro Top", munroDataResults[3].hillCategory)
         assertEquals("NG528215", munroDataResults[3].gridRef)
     }
 
@@ -208,17 +208,17 @@ class MunroDataParserTest {
 
         assertEquals("Ben Chonzie", munroDataResults[0].name)
         assertEquals(931.0, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NN773308", munroDataResults[0].gridRef)
 
         assertEquals("Ben Vorlich", munroDataResults[1].name)
         assertEquals(985.0, munroDataResults[1].heightInMeters)
-        assertEquals("MUN", munroDataResults[1].hillCategory)
+        assertEquals("Munro", munroDataResults[1].hillCategory)
         assertEquals("NN629189", munroDataResults[1].gridRef)
 
         assertEquals("", munroDataResults[2].name)
         assertEquals(1216.0, munroDataResults[2].heightInMeters)
-        assertEquals("TOP", munroDataResults[2].hillCategory)
+        assertEquals("Munro Top", munroDataResults[2].hillCategory)
         assertEquals("NH985025", munroDataResults[2].gridRef)
     }
 
@@ -238,7 +238,7 @@ class MunroDataParserTest {
 
         assertEquals("Ben Chonzie", munroDataResults[0].name)
         assertEquals(931.0, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NN773308", munroDataResults[0].gridRef)
     }
 
@@ -256,42 +256,42 @@ class MunroDataParserTest {
 
         assertEquals("", munroDataResults[0].name)
         assertEquals(1216.0, munroDataResults[0].heightInMeters)
-        assertEquals("TOP", munroDataResults[0].hillCategory)
+        assertEquals("Munro Top", munroDataResults[0].hillCategory)
         assertEquals("NH985025", munroDataResults[0].gridRef)
 
         assertEquals("Ben Chonzie", munroDataResults[1].name)
         assertEquals(931.0, munroDataResults[1].heightInMeters)
-        assertEquals("MUN", munroDataResults[1].hillCategory)
+        assertEquals("Munro", munroDataResults[1].hillCategory)
         assertEquals("NN773308", munroDataResults[1].gridRef)
 
         assertEquals("Ben More", munroDataResults[2].name)
         assertEquals(966.0, munroDataResults[2].heightInMeters)
-        assertEquals("MUN", munroDataResults[2].hillCategory)
+        assertEquals("Munro", munroDataResults[2].hillCategory)
         assertEquals("", munroDataResults[2].gridRef)
 
         assertEquals("Ben Vorlich", munroDataResults[3].name)
         assertEquals(985.0, munroDataResults[3].heightInMeters)
-        assertEquals("MUN", munroDataResults[3].hillCategory)
+        assertEquals("Munro", munroDataResults[3].hillCategory)
         assertEquals("NN629189", munroDataResults[3].gridRef)
 
         assertEquals("Bla Bheinn SW Top", munroDataResults[4].name)
         assertEquals(926.5, munroDataResults[4].heightInMeters)
-        assertEquals("TOP", munroDataResults[4].hillCategory)
+        assertEquals("Munro Top", munroDataResults[4].hillCategory)
         assertEquals("NG528215", munroDataResults[4].gridRef)
 
         assertEquals("Meall Gorm SE Top", munroDataResults[5].name)
         assertEquals(922.0, munroDataResults[5].heightInMeters)
-        assertEquals("TOP", munroDataResults[5].hillCategory)
+        assertEquals("Munro Top", munroDataResults[5].hillCategory)
         assertEquals("NH232691", munroDataResults[5].gridRef)
 
         assertEquals("Sgurr na Banachdich", munroDataResults[6].name)
         assertEquals(0.0, munroDataResults[6].heightInMeters)
-        assertEquals("MUN", munroDataResults[6].hillCategory)
+        assertEquals("Munro", munroDataResults[6].hillCategory)
         assertEquals("NG440224", munroDataResults[6].gridRef)
 
         assertEquals("Sgurr na Banachdich Central Top", munroDataResults[7].name)
         assertEquals(942.0, munroDataResults[7].heightInMeters)
-        assertEquals("TOP", munroDataResults[7].hillCategory)
+        assertEquals("Munro Top", munroDataResults[7].hillCategory)
         assertEquals("NG441222", munroDataResults[7].gridRef)
     }
 
@@ -310,42 +310,42 @@ class MunroDataParserTest {
 
         assertEquals("Sgurr na Banachdich Central Top", munroDataResults[0].name)
         assertEquals(942.0, munroDataResults[0].heightInMeters)
-        assertEquals("TOP", munroDataResults[0].hillCategory)
+        assertEquals("Munro Top", munroDataResults[0].hillCategory)
         assertEquals("NG441222", munroDataResults[0].gridRef)
 
         assertEquals("Sgurr na Banachdich", munroDataResults[1].name)
         assertEquals(0.0, munroDataResults[1].heightInMeters)
-        assertEquals("MUN", munroDataResults[1].hillCategory)
+        assertEquals("Munro", munroDataResults[1].hillCategory)
         assertEquals("NG440224", munroDataResults[1].gridRef)
 
         assertEquals("Meall Gorm SE Top", munroDataResults[2].name)
         assertEquals(922.0, munroDataResults[2].heightInMeters)
-        assertEquals("TOP", munroDataResults[2].hillCategory)
+        assertEquals("Munro Top", munroDataResults[2].hillCategory)
         assertEquals("NH232691", munroDataResults[2].gridRef)
 
         assertEquals("Bla Bheinn SW Top", munroDataResults[3].name)
         assertEquals(926.5, munroDataResults[3].heightInMeters)
-        assertEquals("TOP", munroDataResults[3].hillCategory)
+        assertEquals("Munro Top", munroDataResults[3].hillCategory)
         assertEquals("NG528215", munroDataResults[3].gridRef)
 
         assertEquals("Ben Vorlich", munroDataResults[4].name)
         assertEquals(985.0, munroDataResults[4].heightInMeters)
-        assertEquals("MUN", munroDataResults[4].hillCategory)
+        assertEquals("Munro", munroDataResults[4].hillCategory)
         assertEquals("NN629189", munroDataResults[4].gridRef)
 
         assertEquals("Ben More", munroDataResults[5].name)
         assertEquals(966.0, munroDataResults[5].heightInMeters)
-        assertEquals("MUN", munroDataResults[5].hillCategory)
+        assertEquals("Munro", munroDataResults[5].hillCategory)
         assertEquals("", munroDataResults[5].gridRef)
 
         assertEquals("Ben Chonzie", munroDataResults[6].name)
         assertEquals(931.0, munroDataResults[6].heightInMeters)
-        assertEquals("MUN", munroDataResults[6].hillCategory)
+        assertEquals("Munro", munroDataResults[6].hillCategory)
         assertEquals("NN773308", munroDataResults[6].gridRef)
 
         assertEquals("", munroDataResults[7].name)
         assertEquals(1216.0, munroDataResults[7].heightInMeters)
-        assertEquals("TOP", munroDataResults[7].hillCategory)
+        assertEquals("Munro Top", munroDataResults[7].hillCategory)
         assertEquals("NH985025", munroDataResults[7].gridRef)
 
     }
@@ -365,42 +365,42 @@ class MunroDataParserTest {
 
         assertEquals("Sgurr na Banachdich", munroDataResults[0].name)
         assertEquals(0.0, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NG440224", munroDataResults[0].gridRef)
 
         assertEquals("Meall Gorm SE Top", munroDataResults[1].name)
         assertEquals(922.0, munroDataResults[1].heightInMeters)
-        assertEquals("TOP", munroDataResults[1].hillCategory)
+        assertEquals("Munro Top", munroDataResults[1].hillCategory)
         assertEquals("NH232691", munroDataResults[1].gridRef)
 
         assertEquals("Bla Bheinn SW Top", munroDataResults[2].name)
         assertEquals(926.5, munroDataResults[2].heightInMeters)
-        assertEquals("TOP", munroDataResults[2].hillCategory)
+        assertEquals("Munro Top", munroDataResults[2].hillCategory)
         assertEquals("NG528215", munroDataResults[2].gridRef)
 
         assertEquals("Ben Chonzie", munroDataResults[3].name)
         assertEquals(931.0, munroDataResults[3].heightInMeters)
-        assertEquals("MUN", munroDataResults[3].hillCategory)
+        assertEquals("Munro", munroDataResults[3].hillCategory)
         assertEquals("NN773308", munroDataResults[3].gridRef)
 
         assertEquals("Sgurr na Banachdich Central Top", munroDataResults[4].name)
         assertEquals(942.0, munroDataResults[4].heightInMeters)
-        assertEquals("TOP", munroDataResults[4].hillCategory)
+        assertEquals("Munro Top", munroDataResults[4].hillCategory)
         assertEquals("NG441222", munroDataResults[4].gridRef)
 
         assertEquals("Ben More", munroDataResults[5].name)
         assertEquals(966.0, munroDataResults[5].heightInMeters)
-        assertEquals("MUN", munroDataResults[5].hillCategory)
+        assertEquals("Munro", munroDataResults[5].hillCategory)
         assertEquals("", munroDataResults[5].gridRef)
 
         assertEquals("Ben Vorlich", munroDataResults[6].name)
         assertEquals(985.0, munroDataResults[6].heightInMeters)
-        assertEquals("MUN", munroDataResults[6].hillCategory)
+        assertEquals("Munro", munroDataResults[6].hillCategory)
         assertEquals("NN629189", munroDataResults[6].gridRef)
 
         assertEquals("", munroDataResults[7].name)
         assertEquals(1216.0, munroDataResults[7].heightInMeters)
-        assertEquals("TOP", munroDataResults[7].hillCategory)
+        assertEquals("Munro Top", munroDataResults[7].hillCategory)
         assertEquals("NH985025", munroDataResults[7].gridRef)
 
     }
@@ -419,42 +419,42 @@ class MunroDataParserTest {
 
         assertEquals("", munroDataResults[0].name)
         assertEquals(1216.0, munroDataResults[0].heightInMeters)
-        assertEquals("TOP", munroDataResults[0].hillCategory)
+        assertEquals("Munro Top", munroDataResults[0].hillCategory)
         assertEquals("NH985025", munroDataResults[0].gridRef)
 
         assertEquals("Ben Vorlich", munroDataResults[1].name)
         assertEquals(985.0, munroDataResults[1].heightInMeters)
-        assertEquals("MUN", munroDataResults[1].hillCategory)
+        assertEquals("Munro", munroDataResults[1].hillCategory)
         assertEquals("NN629189", munroDataResults[1].gridRef)
 
         assertEquals("Ben More", munroDataResults[2].name)
         assertEquals(966.0, munroDataResults[2].heightInMeters)
-        assertEquals("MUN", munroDataResults[2].hillCategory)
+        assertEquals("Munro", munroDataResults[2].hillCategory)
         assertEquals("", munroDataResults[2].gridRef)
 
         assertEquals("Sgurr na Banachdich Central Top", munroDataResults[3].name)
         assertEquals(942.0, munroDataResults[3].heightInMeters)
-        assertEquals("TOP", munroDataResults[3].hillCategory)
+        assertEquals("Munro Top", munroDataResults[3].hillCategory)
         assertEquals("NG441222", munroDataResults[3].gridRef)
 
         assertEquals("Ben Chonzie", munroDataResults[4].name)
         assertEquals(931.0, munroDataResults[4].heightInMeters)
-        assertEquals("MUN", munroDataResults[4].hillCategory)
+        assertEquals("Munro", munroDataResults[4].hillCategory)
         assertEquals("NN773308", munroDataResults[4].gridRef)
 
         assertEquals("Bla Bheinn SW Top", munroDataResults[5].name)
         assertEquals(926.5, munroDataResults[5].heightInMeters)
-        assertEquals("TOP", munroDataResults[5].hillCategory)
+        assertEquals("Munro Top", munroDataResults[5].hillCategory)
         assertEquals("NG528215", munroDataResults[5].gridRef)
 
         assertEquals("Meall Gorm SE Top", munroDataResults[6].name)
         assertEquals(922.0, munroDataResults[6].heightInMeters)
-        assertEquals("TOP", munroDataResults[6].hillCategory)
+        assertEquals("Munro Top", munroDataResults[6].hillCategory)
         assertEquals("NH232691", munroDataResults[6].gridRef)
 
         assertEquals("Sgurr na Banachdich", munroDataResults[7].name)
         assertEquals(0.0, munroDataResults[7].heightInMeters)
-        assertEquals("MUN", munroDataResults[7].hillCategory)
+        assertEquals("Munro", munroDataResults[7].hillCategory)
         assertEquals("NG440224", munroDataResults[7].gridRef)
     }
 
@@ -475,17 +475,17 @@ class MunroDataParserTest {
 
         assertEquals("Carn Dearg", munroDataResults[0].name)
         assertEquals(945.7, munroDataResults[0].heightInMeters)
-        assertEquals("MUN", munroDataResults[0].hillCategory)
+        assertEquals("Munro", munroDataResults[0].hillCategory)
         assertEquals("NH635023", munroDataResults[0].gridRef)
 
         assertEquals("Beinn Tulaichean", munroDataResults[1].name)
         assertEquals(945.8, munroDataResults[1].heightInMeters)
-        assertEquals("MUN", munroDataResults[1].hillCategory)
+        assertEquals("Munro", munroDataResults[1].hillCategory)
         assertEquals("NN416196", munroDataResults[1].gridRef)
 
         assertEquals("Sgurr na Sgine", munroDataResults[2].name)
         assertEquals(946.0, munroDataResults[2].heightInMeters)
-        assertEquals("MUN", munroDataResults[2].hillCategory)
+        assertEquals("Munro", munroDataResults[2].hillCategory)
         assertEquals("NG946113", munroDataResults[2].gridRef)
     }
 
