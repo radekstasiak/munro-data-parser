@@ -13,19 +13,19 @@ gradlew build
 
 ## usage
 
-To use the library first you need to create an instance of the parser object providing `csv` file as an input stream
+to use the library first you need to create an instance of the parser object providing `csv` file as an `InputStream`
 
 ```Kotlin
 val parser = MunroDataParser(inputStream = yourInputStream)
 ```
 
-By default parser will use `,` as the delimiter, if you want to use different one provide it via `delimiter` param
+by default parser will use `,` as the delimiter, if you want to use different one then provide it via `delimiter` param
 
 ```Kotlin
 val parser = MunroDataParser(inputStream = inputStream, delimiter = ".")
 ```
 
-You can get list of parsed results using `getResults()` method which returns list of `MunroDataModel` objects
+you can get list of parsed results using `getResults()`, method which returns list of `MunroDataModel` objects
 
 ```Kotlin
 parser.getResults(): List<MunroDataModel>
@@ -38,8 +38,7 @@ data class MunroDataModel(
 )
 ```
 
-if any o the required field is empty in the provided `csv` parser will default its value to either empty `String`
-or `0.0` for `Double` values
+if any of the required fields within provided `csv` file is empty, parser will default its value to either empty `String` or `0.0` for `Double` values
 
 ### filtering and sorting data
 
@@ -51,7 +50,7 @@ you can add multiple filters and define sorting behaviour using `MunroDataQuery.
                             .setMinHeightInMeters(945.7) //double
                             .setMaxHeightInMeters(948.0) //double
                             .setResultsLimit(3) //int
-                            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(ascending = true))
+                            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(ascending = true) // or SortAlphabeticallyByName(ascending)
                             .build()
 
     parser.getResults(query = munroDataQuery)
