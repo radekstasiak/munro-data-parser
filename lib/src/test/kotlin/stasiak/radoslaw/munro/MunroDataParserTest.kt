@@ -248,7 +248,7 @@ class MunroDataParserTest {
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
-            .setSortingRule(sortingRule = MunroDataQuerySortingRules.SortAlphabeticallyByName(true))
+            .sortAlphabeticallyByName(true)
             .build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -302,7 +302,7 @@ class MunroDataParserTest {
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
-            .setSortingRule(MunroDataQuerySortingRules.SortAlphabeticallyByName())
+            .sortAlphabeticallyByName(false)
             .build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -357,7 +357,7 @@ class MunroDataParserTest {
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
-            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(true))
+            .sortByHeightInMeters(true)
             .build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -411,7 +411,7 @@ class MunroDataParserTest {
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
-            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(false))
+            .sortByHeightInMeters(false)
             .build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
@@ -466,7 +466,7 @@ class MunroDataParserTest {
             .setMinHeightInMeters(945.7)
             .setMaxHeightInMeters(948.0)
             .setResultsLimit(3)
-            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters(ascending = true))
+            .sortByHeightInMeters(true)
             .build()
 
         val munroDataResults = parser.getResults(munroDataQuery)

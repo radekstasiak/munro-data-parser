@@ -5,6 +5,9 @@ import org.junit.Test
 import stasiak.radoslaw.munro.MunroDataQuery.Companion.FILTER_BY_HILL_CAT
 import stasiak.radoslaw.munro.MunroDataQuery.Companion.SET_MAX_HEIGHT_IN_M
 import stasiak.radoslaw.munro.MunroDataQuery.Companion.SET_MIN_HEIGHT_IN_M
+import stasiak.radoslaw.munro.MunroDataQuery.Companion.SORT_ALPHABETICALLY
+import stasiak.radoslaw.munro.MunroDataQuery.Companion.SORT_BY_HEIGHT_IN_M
+import stasiak.radoslaw.munro.MunroDataQuery.Companion.SORT_DISABLED
 import java.security.InvalidParameterException
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,7 +23,7 @@ class MunroDataQueryTest {
             MunroDataQuery.MunroDataHillCategory.EITHER,
             (munroDataQuery.filterParamsMap[FILTER_BY_HILL_CAT] as MunroDataQueryFilters.FilterByHilLCategory).hilLCategory
         )
-        assertTrue(munroDataQuery.sortingRule is MunroDataQuerySortingRules.NoSorting)
+        assertTrue(munroDataQuery.sortParamsMap[SORT_DISABLED] is MunroDataQuerySortingRules.NoSorting)
         assertTrue(munroDataQuery.resultsLimit == null)
     }
 
@@ -28,7 +31,8 @@ class MunroDataQueryTest {
     fun `test builder creates MunroDataQuery successfully`() {
         val munroDataQuery = MunroDataQuery.Builder()
             .filterByHillCategory(hilLCategory = MunroDataQuery.MunroDataHillCategory.MUNRO)
-            .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters())
+            .sortByHeightInMeters(false)
+            .sortAlphabeticallyByName(true)
             .setMaxHeightInMeters(maxHeight = 23.12)
             .setMinHeightInMeters(minHeight = 12.12)
             .setResultsLimit(resultsLimit = 10)
@@ -51,8 +55,14 @@ class MunroDataQueryTest {
 
         assertEquals(
             false,
-            (munroDataQuery.sortingRule as MunroDataQuerySortingRules.SortByHeightInMeters).ascending
+            (munroDataQuery.sortParamsMap[SORT_BY_HEIGHT_IN_M] as MunroDataQuerySortingRules.SortByHeightInMeters).ascending
         )
+
+        assertEquals(
+            true,
+            (munroDataQuery.sortParamsMap[SORT_ALPHABETICALLY] as MunroDataQuerySortingRules.SortAlphabeticallyByName).ascending
+        )
+
 
         assertEquals(10, munroDataQuery.resultsLimit)
     }
@@ -63,7 +73,7 @@ class MunroDataQueryTest {
         val exception = assertThrows(InvalidParameterException::class.java) {
             MunroDataQuery.Builder()
                 .filterByHillCategory(hilLCategory = MunroDataQuery.MunroDataHillCategory.MUNRO)
-                .setSortingRule(MunroDataQuerySortingRules.SortByHeightInMeters())
+                .sortByHeightInMeters(false)
                 .setMaxHeightInMeters(maxHeight = 12.12)
                 .setMinHeightInMeters(minHeight = 23.12)
                 .setResultsLimit(resultsLimit = -10)

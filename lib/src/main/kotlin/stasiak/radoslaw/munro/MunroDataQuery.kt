@@ -4,7 +4,7 @@ import java.security.InvalidParameterException
 
 class MunroDataQuery private constructor(
     @JvmSynthetic internal val filterParamsMap: HashMap<String, MunroDataQueryFilters>,
-    @JvmSynthetic internal var sortingRule: MunroDataQuerySortingRules,
+    @JvmSynthetic internal val sortParamsMap: HashMap<String, MunroDataQuerySortingRules>,
     @JvmSynthetic internal val resultsLimit: Int? = null,
 ) {
 
@@ -17,6 +17,14 @@ class MunroDataQuery private constructor(
 
         @JvmSynthetic
         internal const val SET_MAX_HEIGHT_IN_M = "setMaxHeightInMeters"
+
+        @JvmSynthetic
+        internal const val SORT_BY_HEIGHT_IN_M = "sortByHeightInMeters"
+        @JvmSynthetic
+        internal const val SORT_ALPHABETICALLY = "sortByNameAlphabetically"
+
+        @JvmSynthetic
+        internal const val SORT_DISABLED = "sortDisabled"
     }
 
 
@@ -26,7 +34,9 @@ data class Builder(
             MunroDataHillCategory.EITHER
         )
     ),
-    private var sortingRule: MunroDataQuerySortingRules = MunroDataQuerySortingRules.NoSorting,
+    private val sortParams: HashMap<String, MunroDataQuerySortingRules> = hashMapOf(
+        SORT_DISABLED to MunroDataQuerySortingRules.NoSorting
+    ),
     private var resultsLimit: Int? = null,
 
     ) {
@@ -47,8 +57,14 @@ data class Builder(
             MunroDataQueryFilters.SetMaxHeightInMeters(maxHeight)
     }
 
-    fun setSortingRule(sortingRule: MunroDataQuerySortingRules) = apply {
-        this.sortingRule = sortingRule
+    fun sortByHeightInMeters(ascending: Boolean) = apply {
+        sortParams[SORT_BY_HEIGHT_IN_M] =
+            MunroDataQuerySortingRules.SortByHeightInMeters(ascending)
+    }
+
+    fun sortAlphabeticallyByName(ascending: Boolean) = apply {
+        sortParams[SORT_ALPHABETICALLY] =
+            MunroDataQuerySortingRules.SortAlphabeticallyByName(ascending)
     }
 
     fun setResultsLimit(resultsLimit: Int) = apply {
@@ -68,7 +84,7 @@ data class Builder(
         }
         return MunroDataQuery(
             filterParamsMap = this.filterParams,
-            sortingRule = this.sortingRule,
+            sortParamsMap = this.sortParams,
             resultsLimit = resultsLimit
         )
     }

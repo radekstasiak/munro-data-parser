@@ -52,7 +52,7 @@ class MunroDataParser(
     }
 
     fun getResults(query: MunroDataQuery = MunroDataQuery.Builder().build()): List<MunroDataModel> {
-        val munroDataModelList = munroDataRecordList.filter { munroDataRecord ->
+        var munroDataModelList = munroDataRecordList.filter { munroDataRecord ->
             filterMunroDataRecords(munroDataRecord.fieldsMap, query.filterParamsMap)
         }.map { munroDataRecord ->
             MunroDataModel(
@@ -68,13 +68,16 @@ class MunroDataParser(
             )
         }
 
-        val sortedMunroDataModelList = when (val sortingRule = query.sortingRule) {
-            MunroDataQuerySortingRules.NoSorting -> munroDataModelList
-            is MunroDataQuerySortingRules.SortAlphabeticallyByName -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.name } else munroDataModelList.sortedByDescending { it.name }
-            is MunroDataQuerySortingRules.SortByHeightInMeters -> if (sortingRule.ascending) munroDataModelList.sortedBy { it.heightInMeters } else munroDataModelList.sortedByDescending { it.heightInMeters }
+        query.sortParamsMap.entries.forEach { entry ->
+            munroDataModelList = when (val query = entry.value) {
+                is MunroDataQuerySortingRules.SortAlphabeticallyByName -> {
+                    if (query.ascending) munroDataModelList.sortedBy { it.name } else munroDataModelList.sortedByDescending { it.name }
+                }
+                is MunroDataQuerySortingRules.SortByHeightInMeters -> if (query.ascending) munroDataModelList.sortedBy { it.heightInMeters } else munroDataModelList.sortedByDescending { it.heightInMeters }
+                MunroDataQuerySortingRules.NoSorting -> munroDataModelList
+            }
         }
-
-        return if (query.resultsLimit != null) sortedMunroDataModelList.take(query.resultsLimit) else sortedMunroDataModelList
+        return if (query.resultsLimit != null) munroDataModelList.take(query.resultsLimit) else munroDataModelList
     }
 
     private fun filterMunroDataRecords(
