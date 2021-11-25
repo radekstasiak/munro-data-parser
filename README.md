@@ -55,11 +55,7 @@ you can add multiple filters and define sorting behaviour using `MunroDataQuery.
 
     parser.getResults(query = munroDataQuery)
 
-```
 
-available filters are defined in the `MunroDataQueryFilters` class
-
-```Kotlin
 enum class MunroDataHillCategory(val value: String) {
     EITHER(value = ""), //used in parser by default and returns either Munro or Top hills
     MUNRO(value = "MUN"),
