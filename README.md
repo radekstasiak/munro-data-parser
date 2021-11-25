@@ -87,7 +87,7 @@ Included parser applies following rules when to parse cvs files:
 
 ## known limitiations
 
-- inside a quote field, a multiple occurences of `"` character are transformed into single `"` character
+- [CSVParser] when parsing csv record - inside a quote field, a multiple occurences of `"` character are transformed into single `"` character
 
 ## useful links
 
