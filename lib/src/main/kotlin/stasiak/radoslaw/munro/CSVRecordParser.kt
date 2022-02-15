@@ -1,20 +1,10 @@
 package stasiak.radoslaw.munro
 
-// Private constructor to inhibit instantiation
-internal class CSVRecordParser private constructor(private val csvRecord: String, private val delimiter: Char) {
+internal class CSVRecordParser constructor(private val csvRecord: String, private val delimiter: Char) {
 
     private val quoteChar = "\"".single()
     val result: ArrayList<String> = arrayListOf()
     private var currentPosition = 0
-
-
-    // Use the companion object with JvmSynthetic method to
-    // instantiate as it's not accessible from Java
-    companion object {
-        @JvmSynthetic
-        fun instantiate(csvRecord: String, delimiter: Char): CSVRecordParser =
-            CSVRecordParser(csvRecord, delimiter)
-    }
 
     init {
         val token = StringBuffer()

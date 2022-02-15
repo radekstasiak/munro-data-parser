@@ -2,7 +2,7 @@ package stasiak.radoslaw.munro
 
 import java.security.InvalidParameterException
 
-class MunroDataQuery private constructor(
+class MunroDataQuery constructor(
     @JvmSynthetic internal val filterParamsMap: HashMap<String, MunroDataQueryFilters>,
     @JvmSynthetic internal var sortingRule: MunroDataQuerySortingRules,
     @JvmSynthetic internal val resultsLimit: Int? = null,
@@ -96,14 +96,14 @@ data class Builder(
 }
 
 
+}
+
 enum class MunroDataHillCategory(val value: String) {
     EITHER(value = ""), MUNRO(value = "MUN"), TOP(value = "TOP")
 }
 
-}
-
 sealed class MunroDataQueryFilters {
-    data class FilterByHilLCategory(val hilLCategory: MunroDataQuery.MunroDataHillCategory = MunroDataQuery.MunroDataHillCategory.EITHER) :
+    data class FilterByHilLCategory(val hilLCategory: MunroDataHillCategory = MunroDataHillCategory.EITHER) :
         MunroDataQueryFilters()
 
     data class SetMinHeightInMeters(val minHeight: Double) : MunroDataQueryFilters()

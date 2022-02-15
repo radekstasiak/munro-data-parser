@@ -27,7 +27,7 @@ class MunroDataParser(
                 headerList = line.split(delimiter).map { it.trim() }
 
             } else {
-                val csvRecordParser = CSVRecordParser.instantiate(line, delimiter)
+                val csvRecordParser = CSVRecordParser(line, delimiter)
                 val row = csvRecordParser.result
                 //row needs to have at least entry id, this way we can drop non munro data records
                 if (row.size > 0 && row[0].isNotBlank()) {
@@ -88,7 +88,7 @@ class MunroDataParser(
             when (val query = entry.value) {
                 is MunroDataQueryFilters.FilterByHilLCategory -> {
                     when (val hillCategory = query.hilLCategory) {
-                        MunroDataQuery.MunroDataHillCategory.EITHER -> hillCatField == MunroDataQuery.MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataQuery.MunroDataHillCategory.TOP.value
+                        MunroDataHillCategory.EITHER -> hillCatField == MunroDataHillCategory.MUNRO.value || hillCatField == MunroDataHillCategory.TOP.value
                         else -> hillCatField == hillCategory.value
                     }
                 }
