@@ -76,7 +76,7 @@ class MunroDataParserTest {
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery =
-            MunroDataQuery.Builder().filterByHillCategory(MunroDataQuery.MunroDataHillCategory.TOP).build()
+            MunroDataQuery.Builder().filterByHillCategory(MunroDataHillCategory.TOP).build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
         assertEquals(4, munroDataResults.size)
@@ -108,7 +108,7 @@ class MunroDataParserTest {
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery =
-            MunroDataQuery.Builder().filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO).build()
+            MunroDataQuery.Builder().filterByHillCategory(MunroDataHillCategory.MUNRO).build()
         val munroDataResults = parser.getResults(munroDataQuery)
 
         assertEquals(4, munroDataResults.size)
@@ -228,7 +228,7 @@ class MunroDataParserTest {
         val testDataFileInputStream = FileInputStream(Paths.get(resource.toURI()).toFile())
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
-            .filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO)
+            .filterByHillCategory(MunroDataHillCategory.MUNRO)
             .setMaxHeightInMeters(1100.0)
             .setMinHeightInMeters(926.5)
             .setResultsLimit(1).build()
@@ -462,7 +462,7 @@ class MunroDataParserTest {
     fun `parser maps MunroDataRecord to MunroDataModel correctly when multiple filters and sorting rule are set`() {
         val parser = MunroDataParser(testDataFileInputStream)
         val munroDataQuery = MunroDataQuery.Builder()
-            .filterByHillCategory(MunroDataQuery.MunroDataHillCategory.MUNRO)
+            .filterByHillCategory(MunroDataHillCategory.MUNRO)
             .setMinHeightInMeters(945.7)
             .setMaxHeightInMeters(948.0)
             .setResultsLimit(3)

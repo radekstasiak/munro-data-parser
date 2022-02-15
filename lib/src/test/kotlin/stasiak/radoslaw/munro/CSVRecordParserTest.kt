@@ -11,7 +11,7 @@ class CSVRecordParserTest {
     fun `test regular value is parsed correctly`() {
         val csvRecord = "test value"
 
-        val csvRecordParser = CSVRecordParser.instantiate(csvRecord = csvRecord, ",".single())
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord, ",".single())
         val result = csvRecordParser.result
         assertTrue(result.size == 1)
         assertEquals("test value", result[0])
@@ -22,7 +22,7 @@ class CSVRecordParserTest {
     fun `test quoted value is parsed correctly`() {
         val csvRecord = "\"quoted \"\" field\""
 
-        val csvRecordParser = CSVRecordParser.instantiate(csvRecord = csvRecord, ",".single())
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord, ",".single())
         val result = csvRecordParser.result
         assertTrue(result.size == 1)
         assertEquals("quoted \" field", result[0])
@@ -34,7 +34,7 @@ class CSVRecordParserTest {
         val csvRecord =
             ",1,\"http://www.streetmap.co.uk/newmap.srf?x=277324&y=730857&z=3&sv=277324,730857&st=4&tl=~&bi=~&lu=N&ar=y\",http://www.geograph.org.uk/gridref/NN7732430857,http://www.hill-bagging.co.uk/mountaindetails.php?qu=S&rf=1,Ben Chonzie,1,01A,1.1,931,3054,51 52,OL47W 368W 379W,NN773308,NN7732430857,277324,730857,MUN,,TOP,\"Hej, to jest \"\" test\""
 
-        val csvRecordParser = CSVRecordParser.instantiate(csvRecord = csvRecord, ",".single())
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord, ",".single())
         val result = csvRecordParser.result
 
         assertEquals("", result[0])
@@ -70,7 +70,7 @@ class CSVRecordParserTest {
         val csvRecord =
             "503,934,\"http://www.streetmap.co.uk/newmap.srf?x=211733&y=833773&z=3&sv=211733,833773&st=4&tl=~&bi=~&lu=N&ar=y\",http://www.geograph.org.uk/gridref/NH1173333773,http://www.hill-bagging.co.uk/mountaindetails.php?qu=S&rf=934,An Riabhachan West Top,12,12B,12.2,1038,3406,25,429 430,NH117337,NH1173333773,211733,833773,TOP,,,"
 
-        val csvRecordParser = CSVRecordParser.instantiate(csvRecord = csvRecord, ",".single())
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord, ",".single())
         val result = csvRecordParser.result
 
         assertEquals("503", result[0])
@@ -105,7 +105,7 @@ class CSVRecordParserTest {
     fun `test entry starting with a quoted value and ending with regular field is parsed correctly`() {
         val csvRecord =
             "\"\"quoted, field\",982,\"http://www.streetmap.co.uk/newmap.srf?x=192406&y=849911&z=3&sv=192406,849911&st=4&tl=~&bi=~&lu=N&ar=y\",http://www.geograph.org.uk/gridref/NG9240649911,http://www.hill-bagging.co.uk/mountaindetails.php?qu=S&rf=982,Maol Chean-dearg,13,13B,13.2,933,3061,25,429,NG924499,NG9240649911,192406,849911,,,MUN,1891: Meall 'Chinn Dearg"
-        val csvRecordParser = CSVRecordParser.instantiate(csvRecord = csvRecord, ",".single())
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord, ",".single())
         val result = csvRecordParser.result
 
         assertEquals("quoted, field", result[0])
@@ -139,7 +139,7 @@ class CSVRecordParserTest {
     @Test
     fun `test entry with all fields empty is parsed correctly`() {
         val csvRecord = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,"
-        val csvRecordParser = CSVRecordParser.instantiate(csvRecord = csvRecord, ",".single())
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord, ",".single())
         val result = csvRecordParser.result
 
         assertEquals(29, result.size)
@@ -151,7 +151,7 @@ class CSVRecordParserTest {
     @Test
     fun `test entry consisting of only 2 empty fields is parsed correctly`() {
         val csvRecord = ","
-        val csvRecordParser = CSVRecordParser.instantiate(csvRecord = csvRecord, ",".single())
+        val csvRecordParser = CSVRecordParser(csvRecord = csvRecord, ",".single())
         val result = csvRecordParser.result
 
         assertEquals(2, result.size)
